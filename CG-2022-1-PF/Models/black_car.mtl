@@ -1,0 +1,14 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl Vehicle
+Ns 29.241091
+Ka 1.000000 1.000000 1.000000
+Kd 0.066667 0.066667 0.066667
+Ks 0.380000 0.380000 0.380000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Bump cyberpunk-car\\source\\VehicleNormalsMap.tga
+map_Kd C:\\Users\\exmen\\Documents\\CG_2022-1\\Practica_7\\Textures\\Vehicle_basecolor.png
