@@ -407,14 +407,20 @@ void CrearCilindro(int res, float height, float R) {
 	//número de vértices ocupados
 	int verticesBase = (res + 1) * 6;
 	//cálculo del paso interno en la circunferencia y variables que almacenarán cada coordenada de cada vértice
-	GLfloat dt = 2 * PI / res, x, z, y = -0.5f;
+	GLfloat dt = glm::radians( 360 / res + 1), x, z, y = -height;
+	GLfloat textureSegmentStep = 1.0/(res + 1);
 	//apuntadores para guardar todos los vértices e índices generados
 	//GLfloat* vertices = (GLfloat*)calloc(sizeof(GLfloat*), (verticesBase) * 3);
-	std::vector<GLfloat> vertices;
+	std::vector<GLfloat> vertices; // vertices Paredes
+	std::vector<GLfloat> verticesCI; // vertices circulo inferior
+	std::vector<GLfloat> verticesCS; // vertices circulo superior
 	//unsigned int* indices = (unsigned int*)calloc(sizeof(unsigned int*), verticesBase);
-	std::vector<unsigned int> indices;
+	std::vector<unsigned int> indices; // indices paredes
+	std::vector<unsigned int> indicesCI; // indices circulo inferior
+	std::vector<unsigned int> indicesCS; // indices circulo superior
 
 	//ciclo for para crear los vértices de las paredes del cilindro
+	GLfloat currentTextureSegment = 0;
 	for (n = 0; n <= (res); n++) {
 		if (n != res) {
 			x = R * cos((n)*dt);
@@ -425,29 +431,59 @@ void CrearCilindro(int res, float height, float R) {
 			x = R * cos((0) * dt);
 			z = R * sin((0) * dt);
 		}
-		for (i = 0; i < 6; i++) {
+		for (i = 0; i < 16; i++) {
 			switch (i) {
-			case 0:
-				vertices[i + coordenada] = x;
+			case 0:// vertice inferior
+				vertices.push_back(x);
 				break;
 			case 1:
-				vertices[i + coordenada] = y;
+				vertices.push_back(y);
 				break;
 			case 2:
-				vertices[i + coordenada] = z;
+				vertices.push_back(z);
 				break;
-			case 3:
-				vertices[i + coordenada] = x;
+			case 3:// texturas
+				vertices.push_back(currentTextureSegment);
 				break;
 			case 4:
-				vertices[i + coordenada] = 0.5;
+				vertices.push_back( 0.0f );
 				break;
-			case 5:
-				vertices[i + coordenada] = z;
+			case 5://normales
+				vertices.push_back(cos((n)*dt));
+				break;
+			case 6:
+				vertices.push_back(0.0f);
+				break;
+			case 7:
+				vertices.push_back(sin((n)*dt));
+				break;
+			case 8:// vertice superior
+				vertices.push_back(x);
+				break;
+			case 9:
+				vertices.push_back(-y);
+				break;
+			case 10:
+				vertices.push_back(z);
+				break;
+			case 11:// texturas
+				vertices.push_back(currentTextureSegment);
+				break;
+			case 12:
+				vertices.push_back( 1.0f );
+				break;
+			case 13://normales
+				vertices.push_back( cos((n)*dt) );
+				break;
+			case 14:
+				vertices.push_back( 0.0f );
+				break;
+			case 15:
+				vertices.push_back( sin((n)*dt) );
 				break;
 			}
 		}
-		coordenada += 6;
+		currentTextureSegment += textureSegmentStep;
 	}
 
 	//ciclo for para crear la circunferencia inferior
@@ -460,7 +496,7 @@ void CrearCilindro(int res, float height, float R) {
 				vertices[coordenada + i] = x;
 				break;
 			case 1:
-				vertices[coordenada + i] = -0.5f;
+				vertices[coordenada + i] = y;
 				break;
 			case 2:
 				vertices[coordenada + i] = z;
@@ -480,7 +516,7 @@ void CrearCilindro(int res, float height, float R) {
 				vertices[coordenada + i] = x;
 				break;
 			case 1:
-				vertices[coordenada + i] = 0.5;
+				vertices[coordenada + i] = -y;
 				break;
 			case 2:
 				vertices[coordenada + i] = z;
