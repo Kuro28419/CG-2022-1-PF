@@ -10,6 +10,8 @@ public:
 	void CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int numOfVertices, unsigned int numOfIndices, int restartIndex = 0);
 	void RenderMesh();
 	void RenderTorusMesh();
+	void RenderStripMesh();
+	void RenderFanMesh();
 	void ClearMesh();
 
 	~Mesh();

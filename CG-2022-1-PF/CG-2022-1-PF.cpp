@@ -264,7 +264,7 @@ void CrearCubo()
 
 }
 
-void CrearToroide( int mainSegments, int tubeSegments, float mainRadius, float tubeRadius ) {
+void CrearToroide(int mainSegments, int tubeSegments, float mainRadius, float tubeRadius) {
 
 	int numVertices = (mainSegments + 1) * (tubeSegments + 1);
 	int primitiveRestartIndex = numVertices; // Solo si no obtengo la forma para guardar todo los indices
@@ -308,7 +308,7 @@ void CrearToroide( int mainSegments, int tubeSegments, float mainRadius, float t
 			torus_vertices_vector.push_back((mainRadius + tubeRadius * cosTubeSegment) * cosMainSegment);
 			/*torus_vertices[coordenada] = (mainRadius + tubeRadius * cosTubeSegment) * cosMainSegment;
 			coordenada++;*/
-				// coordenada y
+			// coordenada y
 			torus_vertices_vector.push_back((mainRadius + tubeRadius * cosTubeSegment) * sinMainSegment);
 			/*torus_vertices[coordenada] = (mainRadius + tubeRadius * cosTubeSegment) * sinMainSegment;
 			coordenada++;*/
@@ -322,7 +322,7 @@ void CrearToroide( int mainSegments, int tubeSegments, float mainRadius, float t
 				(mainRadius + tubeRadius * cosTubeSegment) * sinMainSegment,
 				tubeRadius * sinTubeSegment);*/
 
-			// texturas
+				// texturas
 			torus_vertices_vector.push_back(currentTubeSegmentTexCoordU);
 			/*torus_vertices[coordenada] = currentTubeSegmentTexCoordU;
 			coordenada++;*/
@@ -403,12 +403,12 @@ void CrearToroide( int mainSegments, int tubeSegments, float mainRadius, float t
 void CrearCilindro(int res, float height, float R) {
 
 	//constantes utilizadas en los ciclos for
-	int n, i, coordenada = 0;
+	int n, i;
 	//número de vértices ocupados
-	int verticesBase = (res + 1) * 6;
+	//int verticesBase = (res + 1) * 6;
 	//cálculo del paso interno en la circunferencia y variables que almacenarán cada coordenada de cada vértice
-	GLfloat dt = glm::radians( 360 / res + 1), x, z, y = -height;
-	GLfloat textureSegmentStep = 1.0/(res + 1);
+	GLfloat dt = glm::radians(360 / float(res)), x, z, y = -height;
+	GLfloat textureSegmentStep = 1.0 / float(res);
 	//apuntadores para guardar todos los vértices e índices generados
 	//GLfloat* vertices = (GLfloat*)calloc(sizeof(GLfloat*), (verticesBase) * 3);
 	std::vector<GLfloat> vertices; // vertices Paredes
@@ -422,15 +422,10 @@ void CrearCilindro(int res, float height, float R) {
 	//ciclo for para crear los vértices de las paredes del cilindro
 	GLfloat currentTextureSegment = 0;
 	for (n = 0; n <= (res); n++) {
-		if (n != res) {
-			x = R * cos((n)*dt);
-			z = R * sin((n)*dt);
-		}
-		//caso para terminar el círculo
-		else {
-			x = R * cos((0) * dt);
-			z = R * sin((0) * dt);
-		}
+
+		x = R * cos((n)*dt);
+		z = R * sin((n)*dt);
+
 		for (i = 0; i < 16; i++) {
 			switch (i) {
 			case 0:// vertice inferior
@@ -446,16 +441,16 @@ void CrearCilindro(int res, float height, float R) {
 				vertices.push_back(currentTextureSegment);
 				break;
 			case 4:
-				vertices.push_back( 0.0f );
+				vertices.push_back(0.0f);
 				break;
 			case 5://normales
-				vertices.push_back(cos((n)*dt));
+				vertices.push_back(x / R);
 				break;
 			case 6:
 				vertices.push_back(0.0f);
 				break;
 			case 7:
-				vertices.push_back(sin((n)*dt));
+				vertices.push_back(z / R);
 				break;
 			case 8:// vertice superior
 				vertices.push_back(x);
@@ -470,73 +465,245 @@ void CrearCilindro(int res, float height, float R) {
 				vertices.push_back(currentTextureSegment);
 				break;
 			case 12:
-				vertices.push_back( 1.0f );
+				vertices.push_back(1.0f);
 				break;
 			case 13://normales
-				vertices.push_back( cos((n)*dt) );
+				vertices.push_back(x / R);
 				break;
 			case 14:
-				vertices.push_back( 0.0f );
+				vertices.push_back(0.0f);
 				break;
 			case 15:
-				vertices.push_back( sin((n)*dt) );
+				vertices.push_back(z / R);
 				break;
 			}
 		}
 		currentTextureSegment += textureSegmentStep;
 	}
+	// indices de la pared
+	for (i = 0; i < vertices.size(); i++) {
+		indices.push_back(i);
+	}
+
 
 	//ciclo for para crear la circunferencia inferior
+	// vertice central inferior
+
 	for (n = 0; n <= (res); n++) {
 		x = R * cos((n)*dt);
 		z = R * sin((n)*dt);
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 8; i++) {
 			switch (i) {
-			case 0:
-				vertices[coordenada + i] = x;
+			case 0:// vertice inferior
+				verticesCI.push_back(x);
 				break;
 			case 1:
-				vertices[coordenada + i] = y;
+				verticesCI.push_back(y);
 				break;
 			case 2:
-				vertices[coordenada + i] = z;
+				verticesCI.push_back(z);
+				break;
+			case 3:// texturas
+				verticesCI.push_back((0.5f * x / R) + 0.5f);
+				break;
+			case 4:
+				verticesCI.push_back((0.5f * z / R) + 0.5f);
+				break;
+			case 5://normales
+				verticesCI.push_back(0.0f);
+				break;
+			case 6:
+				verticesCI.push_back(-1.0f);
+				break;
+			case 7:
+				verticesCI.push_back(0.0f);
 				break;
 			}
 		}
-		coordenada += 3;
+	}
+
+	// indices del circulo inferior
+	for (i = 0; i < verticesCI.size(); i++) {
+		indicesCI.push_back(i);
 	}
 
 	//ciclo for para crear la circunferencia superior
+
 	for (n = 0; n <= (res); n++) {
 		x = R * cos((n)*dt);
 		z = R * sin((n)*dt);
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 8; i++) {
 			switch (i) {
-			case 0:
-				vertices[coordenada + i] = x;
+			case 0:// vertice superior
+				verticesCS.push_back(x);
 				break;
 			case 1:
-				vertices[coordenada + i] = -y;
+				verticesCS.push_back(-y);
 				break;
 			case 2:
-				vertices[coordenada + i] = z;
+				verticesCS.push_back(z);
+				break;
+			case 3:// texturas
+				verticesCS.push_back((0.5f * x / R) + 0.5f);
+				break;
+			case 4:
+				verticesCS.push_back((0.5f * z / R) + 0.5f);
+				break;
+			case 5://normales
+				verticesCS.push_back(0.0f);
+				break;
+			case 6:
+				verticesCS.push_back(1.0f);
+				break;
+			case 7:
+				verticesCS.push_back(0.0f);
 				break;
 			}
 		}
-		coordenada += 3;
 	}
 
-	//Se generan los indices de los vértices
-	for (i = 0; i < verticesBase; i++) {
-		indices.push_back( i );
+	// indices del circulo superior
+	for (i = 0; i < verticesCS.size(); i++) {
+		indicesCS.push_back(i);
 	}
 
-	//se genera el mesh del cilindro
-	Mesh* cilindro = new Mesh();
-	cilindro->CreateMesh(&vertices[0], &indices[0], coordenada, verticesBase);
-	meshList.push_back(cilindro);
+
+	//se genera el mesh de la pared del cilindro
+	Mesh* cilindroP = new Mesh();
+	cilindroP->CreateMesh(&vertices[0], &indices[0], vertices.size(), indices.size());
+	meshList.push_back(cilindroP);
+
+	//se genera el mesh del circulo inferior del cilindro
+	Mesh* cilindroCI = new Mesh();
+	cilindroCI->CreateMesh(&verticesCI[0], &indicesCI[0], verticesCI.size(), indicesCI.size());
+	meshList.push_back(cilindroCI);
+
+	//se genera el mesh del circulo superior del cilindro
+	Mesh* cilindroCS = new Mesh();
+	cilindroCS->CreateMesh(&verticesCS[0], &indicesCS[0], verticesCS.size(), indicesCS.size());
+	meshList.push_back(cilindroCS);
 }
 
+void CrearCono(int res, float height, float R) {
+
+	//constantes utilizadas en los ciclos for
+	int n, i;
+	//número de vértices ocupados
+	//int verticesBase = (res + 1) * 6;
+	//cálculo del paso interno en la circunferencia y variables que almacenarán cada coordenada de cada vértice
+	GLfloat dt = glm::radians(360 / float(res)), x, z, y = height;
+	GLfloat textureSegmentStep = 1.0 / float(res);
+	//apuntadores para guardar todos los vértices e índices generados
+	//GLfloat* vertices = (GLfloat*)calloc(sizeof(GLfloat*), (verticesBase) * 3);
+	std::vector<GLfloat> verticesCI; // vertices circulo inferior
+	std::vector<GLfloat> verticesCS; // vertices circulo superior
+	//unsigned int* indices = (unsigned int*)calloc(sizeof(unsigned int*), verticesBase);
+	std::vector<unsigned int> indicesCI; // indices circulo inferior
+	std::vector<unsigned int> indicesCS; // indices circulo superior
+
+
+	//ciclo for para crear la circunferencia inferior
+	// vertice central inferior
+
+	for (n = 0; n <= (res); n++) {
+		x = R * cos((n)*dt);
+		z = R * sin((n)*dt);
+		for (i = 0; i < 8; i++) {
+			switch (i) {
+			case 0:// vertice inferior
+				verticesCI.push_back(x);
+				break;
+			case 1:
+				verticesCI.push_back(0.0);
+				break;
+			case 2:
+				verticesCI.push_back(z);
+				break;
+			case 3:// texturas
+				verticesCI.push_back((0.5f * x / R) + 0.5f);
+				break;
+			case 4:
+				verticesCI.push_back((0.5f * z / R) + 0.5f);
+				break;
+			case 5://normales
+				verticesCI.push_back(0.0f);
+				break;
+			case 6:
+				verticesCI.push_back(-1.0f);
+				break;
+			case 7:
+				verticesCI.push_back(0.0f);
+				break;
+			}
+		}
+	}
+
+	// indices del circulo inferior
+	for (i = 0; i < verticesCI.size(); i++) {
+		indicesCI.push_back(i);
+	}
+
+	//ciclo for para crear la circunferencia superior
+	verticesCS.push_back(0.0);
+	verticesCS.push_back(y);
+	verticesCS.push_back(0.0);
+	// texturas
+	verticesCS.push_back(0.5f);
+	verticesCS.push_back(0.5f);
+	//normales
+	verticesCS.push_back(0.0f);
+	verticesCS.push_back(1.0f);
+	verticesCS.push_back(0.0f);
+
+	for (n = 0; n <= (res); n++) {
+		x = R * cos((n)*dt);
+		z = R * sin((n)*dt);
+		for (i = 0; i < 8; i++) {
+			switch (i) {
+			case 0:// vertice superior
+				verticesCS.push_back(x);
+				break;
+			case 1:
+				verticesCS.push_back(0.0);
+				break;
+			case 2:
+				verticesCS.push_back(z);
+				break;
+			case 3:// texturas
+				verticesCS.push_back((0.5f * x / R) + 0.5f);
+				break;
+			case 4:
+				verticesCS.push_back((0.5f * z / R) + 0.5f);
+				break;
+			case 5://normales
+				verticesCS.push_back(0.0f);
+				break;
+			case 6:
+				verticesCS.push_back(1.0f);
+				break;
+			case 7:
+				verticesCS.push_back(0.0f);
+				break;
+			}
+		}
+	}
+
+	// indices del circulo superior
+	for (i = 0; i < verticesCS.size(); i++) {
+		indicesCS.push_back(i);
+	}
+
+
+	//se genera el mesh del circulo inferior del cilindro
+	Mesh* cilindroCI = new Mesh();
+	cilindroCI->CreateMesh(&verticesCI[0], &indicesCI[0], verticesCI.size(), indicesCI.size());
+	meshList.push_back(cilindroCI);
+
+	//se genera el mesh del circulo superior del cilindro
+	Mesh* cilindroCS = new Mesh();
+	cilindroCS->CreateMesh(&verticesCS[0], &indicesCS[0], verticesCS.size(), indicesCS.size());
+	meshList.push_back(cilindroCS);
+}
 void CreateShaders()
 {
 	Shader *shader1 = new Shader();
@@ -554,6 +721,8 @@ int main()
 	CreateObjects();
 	CrearCubo();
 	CrearToroide(20, 20, 2, 1);
+	CrearCilindro( 10, 3, 1 );
+	CrearCono( 10, 3, 1 );
 	CreateShaders();
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
@@ -743,7 +912,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Kitt_M.RenderModel();
+		//Kitt_M.RenderModel();
 
 		// matriz de eje centro auto
 		glm::mat4 matrizECentro(1.0);
@@ -763,7 +932,7 @@ int main()
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Llanta_M.RenderModel();
+		//Llanta_M.RenderModel();
 
 		// matriz eje trasero der
 		model = matrizECentro;
@@ -776,7 +945,7 @@ int main()
 		model = glm::rotate(model, 270 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Llanta_M.RenderModel();
+		//Llanta_M.RenderModel();
 
 		// matriz eje frontal der
 		model = matrizECentro;
@@ -790,7 +959,7 @@ int main()
 		model = glm::rotate(model, 270 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Llanta_M.RenderModel();
+		//Llanta_M.RenderModel();
 
 		// matriz eje frontal izq
 		model = matrizECentro;
@@ -804,7 +973,7 @@ int main()
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Llanta_M.RenderModel();
+		//Llanta_M.RenderModel();
 
 
 		////Agregar llantas con jerarquía y rotación propia
@@ -827,7 +996,7 @@ int main()
 		//agregar material al helicóptero
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		//Blackhawk_M.RenderModel();
-		Blackhawk_M_Body.RenderModel();
+		//Blackhawk_M_Body.RenderModel();
 
 		//¿Cómo ligas la luz al helicóptero?
 		
@@ -839,7 +1008,7 @@ int main()
 		// Helices superiores
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Blackhawk_M_UBlade.RenderModel();
+		//Blackhawk_M_UBlade.RenderModel();
 
 		// Matriz de eje de helice trasera.
 		model = matrizAux;
@@ -849,14 +1018,14 @@ int main()
 		// Helices trasera
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Blackhawk_M_BBlade.RenderModel();
+		//Blackhawk_M_BBlade.RenderModel();
 
 
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.53f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Camino_M.RenderModel();
+		//Camino_M.RenderModel();
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 10.0f));
@@ -864,6 +1033,20 @@ int main()
 		toroidTexture.UseTexture();
 		meshList[5]->RenderTorusMesh();
 
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		toroidTexture.UseTexture();
+		meshList[6]->RenderStripMesh();
+		meshList[7]->RenderFanMesh();
+		meshList[8]->RenderFanMesh();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 30.0f, -10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		toroidTexture.UseTexture();
+		meshList[9]->RenderFanMesh();
+		meshList[10]->RenderFanMesh();
 
 		glUseProgram(0);
 
