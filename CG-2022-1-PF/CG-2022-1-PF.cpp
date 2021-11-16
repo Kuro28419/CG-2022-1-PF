@@ -881,27 +881,11 @@ int main()
 	Tagave = Texture("Textures/Agave.tga");
 	Tagave.LoadTextureA();
 
-	Kitt_M = Model();
-	Kitt_M.LoadModel("Models/black_car.obj");
-	Llanta_M = Model();
-	Llanta_M.LoadModel("Models/llanta.obj");
-	Blackhawk_M = Model();
-	Blackhawk_M.LoadModel("Models/uh60.obj");
-	Camino_M = Model();
-	Camino_M.LoadModel("Models/railroad track.obj");
 
 	Dado_M = Model();
 	Dado_M.LoadModel("Models/dadoanimales.obj");
 
 
-	Blackhawk_M_Body = Model();
-	Blackhawk_M_Body.LoadModel("Models/Black Hawk uh-60-Body.obj");
-
-	Blackhawk_M_UBlade = Model();
-	Blackhawk_M_UBlade.LoadModel("Models/Black Hawk uh-60-UBlade.obj");
-
-	Blackhawk_M_BBlade = Model();
-	Blackhawk_M_BBlade.LoadModel("Models/Black Hawk uh-60-BBlade2.obj");
 
 
 	std::vector<std::string> skyboxFaces;
@@ -934,49 +918,22 @@ int main()
 	pointLightCount++;*/
 
 	unsigned int spotLightCount = 0;
-	////linterna
-	//spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-	//	0.0f, 2.0f,
-	//	0.0f, 0.0f, 0.0f,
-	//	0.0f, -1.0f, 0.0f,
-	//	1.0f, 0.0f, 0.0f,
-	//	5.0f);
-	//spotLightCount++;
+	//linterna
+	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+		0.0f, 2.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		5.0f);
+	spotLightCount++;
 
 	//luz fija
-	/*spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
+	spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
 		1.0f, 2.0f,
 		5.0f, 10.0f, 0.0f,
 		0.0f, -5.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		15.0f);
-	spotLightCount++;*/
-	
-	//luz de helicóptero
-	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.0f, 2.0f,
-		-20.0f, 5.0f, -1.0,
-		0.0f, -1.0f, 0.0f,
-		0.1f, 0.05f, 0.001f,
-		30.0f);
-	spotLightCount++;
-
-	//luz de faro
-	spotLights[1] = SpotLight(1.0f, 1.0f, 1.0f,
-		1.0f, 2.0f,
-		-2.0f, 1.7f, 2.0f,
-		-1.0f, 0.0f, 0.0f,
-		0.5f, 0.01f, 0.0009f,
-		25.0f);
-	spotLightCount++;
-
-
-	spotLights[2] = SpotLight(1.0f, 1.0f, 1.0f,
-		1.0f, 2.0f,
-		-2.0f, 1.7f, -2.0f,
-		-1.0f, 0.0f, 0.0f,
-		0.5f, 0.01f, 0.0009f,
-		25.0f);
 	spotLightCount++;
 
 
@@ -1021,10 +978,7 @@ int main()
 		//luz ligada a la cámara de tipo flash 
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		//spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
-		spotLights[0].SetPos(glm::vec3(-20.0f + mainWindow.getHelix(), 6.0f + mainWindow.getHeliy(), -1.0));
-		spotLights[1].SetPos( glm::vec3(-5.0f + mainWindow.getmuevex(), 1.7f, 2.0f + mainWindow.getmuevez()) );
-		spotLights[2].SetPos( glm::vec3(-5.0f + mainWindow.getmuevex(), 1.7f, -2.0f + mainWindow.getmuevez()) );
+		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
@@ -1044,11 +998,6 @@ int main()
 		meshList[2]->RenderMesh();
 
 
-
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -1.53f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Camino_M.RenderModel();
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 10.0f));
