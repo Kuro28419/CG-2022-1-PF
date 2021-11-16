@@ -267,7 +267,7 @@ void CrearCubo()
 void CrearToroide(int mainSegments, int tubeSegments, float mainRadius, float tubeRadius) {
 
 	int numVertices = (mainSegments + 1) * (tubeSegments + 1);
-	int primitiveRestartIndex = numVertices; // Solo si no obtengo la forma para guardar todo los indices
+	int primitiveRestartIndex = numVertices;
 	int numIndices = (mainSegments * 2 * (tubeSegments + 1)) + mainSegments - 1;
 	//size_t coordenada = 0;
 
@@ -704,6 +704,144 @@ void CrearCono(int res, float height, float R) {
 	cilindroCS->CreateMesh(&verticesCS[0], &indicesCS[0], verticesCS.size(), indicesCS.size());
 	meshList.push_back(cilindroCS);
 }
+
+void CrearEsfera( float radio,  int numStacks) {
+
+	std::vector<GLfloat> esfera_vertices_vector;
+	std::vector<unsigned int> esfera_indices_vector;
+	std::vector<unsigned int> esfera_indices_PN_vector;
+	std::vector<unsigned int> esfera_indices_PS_vector;
+
+	// Pre-calculate sines / cosines for given number of slices
+	float SliceAngleStep = 2.0f*PI / float(numStacks);
+	float currentSliceAngle = 0.0f;
+	std::vector<float> sliceSines, sliceCosines;
+	for (auto i = 0; i <= numStacks; i++)
+	{
+		sliceSines.push_back(sin(currentSliceAngle));
+		sliceCosines.push_back(cos(currentSliceAngle));
+
+		// Update stack angle
+		currentSliceAngle += SliceAngleStep;
+	}
+
+	// Pre-calculate sines / cosines for given number of stacks
+	float stackAngleStep = -PI / float(numStacks);
+	float currentStackAngle = PI / 2.0f;
+	std::vector<float> stackSines, stackCosines;
+	for (auto i = 0; i <= numStacks; i++)
+	{
+		stackSines.push_back(sin(currentStackAngle));
+		stackCosines.push_back(cos(currentStackAngle));
+
+		// Update stack angle
+		currentStackAngle += stackAngleStep;
+	}
+	
+	// generacion de los vectores
+	for (size_t i = 0; i <= numStacks; i++)
+	{
+		for (size_t j = 0; j <= numStacks; j++)
+		{
+			// Incersion de vectores de posicion
+			float x = radio * stackCosines[i] * sliceCosines[j];
+			float y = radio * stackSines[i];
+			float z = radio * stackCosines[i] * sliceSines[j];
+			//_vbo.addData(glm::vec3(x, y, z));
+			esfera_vertices_vector.push_back(x);
+			esfera_vertices_vector.push_back(y);
+			esfera_vertices_vector.push_back(z);
+
+			// incersion de texturas
+			float u = 1.0f - float(j) / numStacks;
+			float v = 1.0f - float(i) / numStacks;
+			//_vbo.addData(glm::vec2(u, v));
+			esfera_vertices_vector.push_back(u);
+			esfera_vertices_vector.push_back(v);
+
+			// incersion de normales
+			esfera_vertices_vector.push_back(x/radio);
+			esfera_vertices_vector.push_back(y/radio);
+			esfera_vertices_vector.push_back(z/radio);
+			
+		}
+	}
+
+	/// indices
+
+	// generacion de indices para el polo superior
+	for (int i = 0; i < numStacks; i++)
+	{
+		GLuint sliceIndex = i;
+		GLuint nextSliceIndex = sliceIndex + numStacks + 1;
+		esfera_indices_PN_vector.push_back(float((sliceIndex)));
+		esfera_indices_PN_vector.push_back(float((nextSliceIndex)));
+		esfera_indices_PN_vector.push_back(float((nextSliceIndex + 1)));
+		//esfera_indices_PN_vector.push_back(i);
+		//_indicesVBO.addData(static_cast(sliceIndex));
+		//_indicesVBO.addData(static_cast(nextSliceIndex));
+		//_indicesVBO.addData(static_cast(nextSliceIndex + 1));
+	}
+
+	int numVertices = (numStacks + 1) * (numStacks + 1);
+	int primitiveRestartIndex = numVertices;
+
+	// generacion de indices para el cuerpo de la esfera
+	GLuint currentVertexIndex = numStacks + 1;
+	for (int i = 0; i < (numStacks-2); i++)
+	{
+		// Primitive restart triangle strip from second body stack on
+		if (i > 0)
+		{
+			esfera_indices_vector.push_back(primitiveRestartIndex);
+			//_indicesVBO.addData(primitiveRestartIndex);
+		}
+
+		for (int j = 0; j <= numStacks; j++)
+		{
+			GLuint sliceIndex = currentVertexIndex + j;
+			GLuint nextSliceIndex = currentVertexIndex + numStacks + 1 + j;
+			esfera_indices_vector.push_back(sliceIndex);
+			esfera_indices_vector.push_back(nextSliceIndex);
+			//_indicesVBO.addData(sliceIndex);
+			//_indicesVBO.addData(nextSliceIndex);
+		}
+
+		currentVertexIndex += numStacks + 1;
+	}
+
+	// And finally south pole (triangles again)
+	GLuint beforeLastStackIndexOffset = numVertices - 2 * (numStacks + 1);
+	for (int i = 0; i < numStacks; i++)
+	{
+		GLuint sliceIndex = beforeLastStackIndexOffset + i;
+		GLuint nextSliceIndex = sliceIndex + numStacks + 1;
+		esfera_indices_PS_vector.push_back(sliceIndex);
+		esfera_indices_PS_vector.push_back(sliceIndex + 1);
+		esfera_indices_PS_vector.push_back(nextSliceIndex);
+
+		//esfera_indices_PS_vector.push_back(i);
+		//_indicesVBO.addData(static_cast(sliceIndex));
+		//_indicesVBO.addData(static_cast(sliceIndex + 1));
+		//_indicesVBO.addData(static_cast(nextSliceIndex));
+	}
+
+	//la primera capa superior de la esfera
+	Mesh* esferaPN = new Mesh();
+	esferaPN->CreateMesh(&esfera_vertices_vector[0], &esfera_indices_PN_vector[0], esfera_vertices_vector.size(), esfera_indices_PN_vector.size());
+	meshList.push_back(esferaPN);
+
+	//El cuerpo de la esfera.
+	Mesh* esferaC = new Mesh();
+	esferaC->CreateMesh(&esfera_vertices_vector[0], &esfera_indices_vector[0], esfera_vertices_vector.size(), esfera_indices_vector.size());
+	meshList.push_back(esferaC);
+
+	//la ultima capa inferior de la esfera
+	Mesh* esferaPS = new Mesh();
+	esferaPS->CreateMesh(&esfera_vertices_vector[0], &esfera_indices_PS_vector[0], esfera_vertices_vector.size(), esfera_indices_PS_vector.size());
+	meshList.push_back(esferaPS);
+}
+
 void CreateShaders()
 {
 	Shader *shader1 = new Shader();
@@ -723,6 +861,7 @@ int main()
 	CrearToroide(20, 20, 2, 1);
 	CrearCilindro( 10, 3, 1 );
 	CrearCono( 10, 3, 1 );
+	CrearEsfera( 1, 20 );
 	CreateShaders();
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
@@ -904,122 +1043,6 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
-		//agregar su coche y ponerle material
-		model = glm::mat4(1.0);
-		glm::mat4 matrizAux(1.0); //Matriz auxiliar para almacenar informacion a heredar
-		model = glm::translate(model, glm::vec3( 1.0f + mainWindow.getmuevex(), 0.0f, mainWindow.getmuevez()) );
-		matrizAux = model;
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Kitt_M.RenderModel();
-
-		// matriz de eje centro auto
-		glm::mat4 matrizECentro(1.0);
-		model = matrizAux;
-		model = glm::translate(model, glm::vec3(0.0f, 1.2f, 0.0f));
-		matrizECentro = model;
-
-
-		// matriz eje trasero izq
-		model = matrizECentro;
-		model = glm::translate(model, glm::vec3(4.3f , 0.0f, 2.7f));
-		matrizAux = model;
-
-		//Agregar llanta trasera izquierda con jerarquía y rotación propia
-		model = matrizAux;
-		model = glm::translate(model, glm::vec3(0.0, 0.0f, 0.3f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Llanta_M.RenderModel();
-
-		// matriz eje trasero der
-		model = matrizECentro;
-		model = glm::translate(model, glm::vec3(4.3f, 0.0f, -2.7f));
-		matrizAux = model;
-
-		//Agregar llanta trasera derecha
-		model = matrizAux;
-		model = glm::translate(model, glm::vec3(0.0, 0.0f, -0.3f));
-		model = glm::rotate(model, 270 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Llanta_M.RenderModel();
-
-		// matriz eje frontal der
-		model = matrizECentro;
-		model = glm::translate(model, glm::vec3(-4.3f, 0.0f, -2.7f));
-		model = glm::rotate(model, mainWindow.getWheelRot() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		matrizAux = model;
-
-		//Agregar llanta frontal derecha con jerarquía y rotación propia
-		model = matrizAux;
-		model = glm::translate(model, glm::vec3(0.0, 0.0f, -0.3f));
-		model = glm::rotate(model, 270 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Llanta_M.RenderModel();
-
-		// matriz eje frontal izq
-		model = matrizECentro;
-		model = glm::translate(model, glm::vec3(-4.3f, 0.0f, 2.7f));
-		model = glm::rotate(model, mainWindow.getWheelRot() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		matrizAux = model;
-
-		//Agregar llanta frontal izquierda con jerarquía y rotación propia
-		model = matrizAux;
-		model = glm::translate(model, glm::vec3(0.0, 0.0f, 0.3f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Llanta_M.RenderModel();
-
-
-		////Agregar llantas con jerarquía y rotación propia
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3( 0.0, 1.2f, 3.0f));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//model = glm::scale(model, glm::vec3(0.45f, 0.45f, 0.45f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Llanta_M.RenderModel();
-
-
-		// Helicoptero
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f + mainWindow.getHelix(), 6.0f + mainWindow.getHeliy(), -1.0));
-		model = glm::scale(model, glm::vec3(0.8f, 0.8f, 0.8f));
-		matrizAux = model;
-		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//agregar material al helicóptero
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		//Blackhawk_M.RenderModel();
-		//Blackhawk_M_Body.RenderModel();
-
-		//¿Cómo ligas la luz al helicóptero?
-		
-		// Matriz de eje de helice superior.
-		model = matrizAux;
-		//model = glm::translate(model, glm::vec3(0.0f, 6.8f, 0.0));
-		model = glm::rotate(model, mainWindow.getHeliBlades() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// Helices superiores
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		//Blackhawk_M_UBlade.RenderModel();
-
-		// Matriz de eje de helice trasera.
-		model = matrizAux;
-		model = glm::translate(model, glm::vec3(10.5f, 2.3f, -0.4));
-		model = glm::rotate(model, mainWindow.getHeliBlades() * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		// Helices trasera
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		//Blackhawk_M_BBlade.RenderModel();
-
 
 
 		model = glm::mat4(1.0);
@@ -1029,8 +1052,9 @@ int main()
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 10.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		toroidTexture.UseTexture();
+		pisoTexture.UseTexture();
 		meshList[5]->RenderTorusMesh();
 
 		model = glm::mat4(1.0);
@@ -1047,6 +1071,14 @@ int main()
 		toroidTexture.UseTexture();
 		meshList[9]->RenderFanMesh();
 		meshList[10]->RenderFanMesh();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, 30.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		toroidTexture.UseTexture();
+		meshList[11]->RenderMesh();
+		meshList[12]->RenderTorusMesh();
+		meshList[13]->RenderMesh();
 
 		glUseProgram(0);
 

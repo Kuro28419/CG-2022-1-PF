@@ -32,7 +32,7 @@ Sphere::~Sphere() {
 
 
 void Sphere::init() {
-		vertexC.resize(((slices + 1) * (stacks + 1)));
+	vertexC.resize(((slices + 1) * (stacks + 1)));
 	index.resize((slices * stacks + slices) * 6);
 	for (int i = 0; i <= stacks; ++i) {
 		float V = i / (float)stacks;
