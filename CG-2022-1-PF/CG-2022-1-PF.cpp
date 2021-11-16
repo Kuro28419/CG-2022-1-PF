@@ -335,13 +335,13 @@ void CrearToroide(int mainSegments, int tubeSegments, float mainRadius, float tu
 			currentTubeSegmentTexCoordU += tubeSegmentTextureStep;
 
 			// normals
-			torus_vertices_vector.push_back(cosMainSegment * cosTubeSegment);
+			torus_vertices_vector.push_back(-cosMainSegment * cosTubeSegment);
 			/*torus_vertices[coordenada] = cosMainSegment * cosTubeSegment;
 			coordenada++;*/
-			torus_vertices_vector.push_back(sinMainSegment * cosTubeSegment);
+			torus_vertices_vector.push_back(-sinMainSegment * cosTubeSegment);
 			/*torus_vertices[coordenada] = sinMainSegment * cosTubeSegment;
 			coordenada++;*/
-			torus_vertices_vector.push_back(sinTubeSegment);
+			torus_vertices_vector.push_back(-sinTubeSegment);
 			/*torus_vertices[coordenada] = sinTubeSegment;
 			coordenada++;*/
 			/*auto normal = glm::vec3(
@@ -444,13 +444,13 @@ void CrearCilindro(int res, float height, float R) {
 				vertices.push_back(0.0f);
 				break;
 			case 5://normales
-				vertices.push_back(x / R);
+				vertices.push_back(-x / R);
 				break;
 			case 6:
 				vertices.push_back(0.0f);
 				break;
 			case 7:
-				vertices.push_back(z / R);
+				vertices.push_back(-z / R);
 				break;
 			case 8:// vertice superior
 				vertices.push_back(x);
@@ -468,13 +468,13 @@ void CrearCilindro(int res, float height, float R) {
 				vertices.push_back(1.0f);
 				break;
 			case 13://normales
-				vertices.push_back(x / R);
+				vertices.push_back(-x / R);
 				break;
 			case 14:
 				vertices.push_back(0.0f);
 				break;
 			case 15:
-				vertices.push_back(z / R);
+				vertices.push_back(-z / R);
 				break;
 			}
 		}
@@ -513,7 +513,7 @@ void CrearCilindro(int res, float height, float R) {
 				verticesCI.push_back(0.0f);
 				break;
 			case 6:
-				verticesCI.push_back(-1.0f);
+				verticesCI.push_back(1.0f);
 				break;
 			case 7:
 				verticesCI.push_back(0.0f);
@@ -553,7 +553,7 @@ void CrearCilindro(int res, float height, float R) {
 				verticesCS.push_back(0.0f);
 				break;
 			case 6:
-				verticesCS.push_back(1.0f);
+				verticesCS.push_back(-1.0f);
 				break;
 			case 7:
 				verticesCS.push_back(0.0f);
@@ -629,7 +629,7 @@ void CrearCono(int res, float height, float R) {
 				verticesCI.push_back(0.0f);
 				break;
 			case 6:
-				verticesCI.push_back(-1.0f);
+				verticesCI.push_back(1.0f);
 				break;
 			case 7:
 				verticesCI.push_back(0.0f);
@@ -652,7 +652,7 @@ void CrearCono(int res, float height, float R) {
 	verticesCS.push_back(0.5f);
 	//normales
 	verticesCS.push_back(0.0f);
-	verticesCS.push_back(1.0f);
+	verticesCS.push_back(-1.0f);
 	verticesCS.push_back(0.0f);
 
 	for (n = 0; n <= (res); n++) {
@@ -676,13 +676,13 @@ void CrearCono(int res, float height, float R) {
 				verticesCS.push_back((0.5f * z / R) + 0.5f);
 				break;
 			case 5://normales
-				verticesCS.push_back(0.0f);
+				verticesCS.push_back(-x / R);
 				break;
 			case 6:
-				verticesCS.push_back(1.0f);
+				verticesCS.push_back(-1.0f);
 				break;
 			case 7:
-				verticesCS.push_back(0.0f);
+				verticesCS.push_back(-z / R);
 				break;
 			}
 		}
@@ -760,9 +760,9 @@ void CrearEsfera( float radio,  int numStacks) {
 			esfera_vertices_vector.push_back(v);
 
 			// incersion de normales
-			esfera_vertices_vector.push_back(x/radio);
-			esfera_vertices_vector.push_back(y/radio);
-			esfera_vertices_vector.push_back(z/radio);
+			esfera_vertices_vector.push_back(-x/radio);
+			esfera_vertices_vector.push_back(-y/radio);
+			esfera_vertices_vector.push_back(-z/radio);
 			
 		}
 	}
