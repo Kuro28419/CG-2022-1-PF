@@ -284,10 +284,11 @@ int main()
 	plainTexture.LoadTextureA();
 	dadoTexture = Texture("Textures/dado.tga");
 	dadoTexture.LoadTextureA();
-	pisoTexture = Texture("Textures/piso.tga");
+	pisoTexture = Texture("Textures/nieve.jpg");
 	pisoTexture.LoadTextureA();
 	Tagave = Texture("Textures/Agave.tga");
 	Tagave.LoadTextureA();
+
 	//Textura prueba
 	Tagave = Texture("Textures/A4.png");
 	Tagave.LoadTextureA();
