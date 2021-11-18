@@ -55,13 +55,6 @@ Texture Tagave;
 Texture toroidTexture;
 
 
-Model Kitt_M;
-Model Llanta_M;
-Model Camino_M;
-Model Blackhawk_M;
-Model Blackhawk_M_Body;
-Model Blackhawk_M_UBlade;
-Model Blackhawk_M_BBlade;
 Model Dado_M;
 
 Skybox skybox;
@@ -997,7 +990,7 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
-
+		// toroide
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 10.0f));
@@ -1005,6 +998,8 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		pisoTexture.UseTexture();
 		meshList[5]->RenderTorusMesh();
+
+		// cilindro
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 0.0f));
@@ -1014,12 +1009,16 @@ int main()
 		meshList[7]->RenderFanMesh();
 		meshList[8]->RenderFanMesh();
 
+		// cono
+
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 30.0f, -10.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		toroidTexture.UseTexture();
 		meshList[9]->RenderFanMesh();
 		meshList[10]->RenderFanMesh();
+
+		// esfera
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(10.0f, 30.0f, 0.0f));
