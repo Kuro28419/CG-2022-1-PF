@@ -54,7 +54,6 @@ Texture dirtTexture;
 Texture plainTexture;
 Texture dadoTexture;
 Texture pisoTexture;
-Texture Tagave;
 Texture toroidTexture;
 
 
@@ -62,6 +61,12 @@ Model Dado_M;
 
 Skybox skyboxNight;
 Skybox skyboxMorning;
+Model Blackhawk_M_Body;
+Model Blackhawk_M_UBlade;
+Model Blackhawk_M_BBlade;
+Model Dado_M;
+
+Skybox skybox;
 
 //materiales
 Material Material_brillante;
@@ -279,12 +284,6 @@ void CrearCubo()
 		  0.5f, 0.5f,  -0.5f,	0.48f,	0.98f,		0.0f,	-1.0f,	0.0f,
 		 -0.5f, 0.5f,  -0.5f,	0.27f,	0.98f,		0.0f,	-1.0f,	0.0f,
 
-	};
-
-	Mesh *cubo = new Mesh();
-	cubo->CreateMesh(cubo_vertices, cubo_indices, 192, 36);
-	meshList.push_back(cubo);
-
 }
 
 void CrearToroide(int mainSegments, int tubeSegments, float mainRadius, float tubeRadius) {
@@ -383,13 +382,7 @@ void CrearToroide(int mainSegments, int tubeSegments, float mainRadius, float tu
 		currentMainSegmentTexCoordV += mainSegmentTextureStep;
 	}
 
-	// generacion de indices
-
-	std::vector<unsigned int> torus_indices_vector;
-	//unsigned int* torus_indices = (unsigned int*)calloc(sizeof(unsigned int*), numIndices);
-
-	//coordenada = 0;
-
+		// Update main segment angle
 	GLuint currentVertexOffset = 0;
 	for (size_t i = 0; i < mainSegments; i++)
 	{
@@ -1002,6 +995,12 @@ void CrearEsfera( float radio,  int numStacks) {
 	meshList.push_back(esferaPS);
 }
 
+	//se genera el mesh del cilindro
+	Mesh* cilindro = new Mesh();
+	cilindro->CreateMesh(&vertices[0], &indices[0], coordenada, verticesBase);
+	meshList.push_back(cilindro);
+}
+
 void CreateShaders()
 {
 	Shader *shader1 = new Shader();
@@ -1065,26 +1064,20 @@ void qiqiAnimation() {
 }
 
 int main()
-{
+	CrearToroide(20, 20, 2, 1);
+	CrearCilindro( 10, 3, 1 );
+	CrearCono( 10, 3, 1 );
+	CrearEsfera( 1, 20 );
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
 	mainWindow.Initialise();
 
 	CreateObjects();
 	CrearCubo();
 	CrearToroide(20, 20, 2, 1);
-	CrearCilindro( 10, 3, 1 );
-	CrearCono( 10, 3, 1 );
-	CrearEsfera( 1, 20 );
 	CreateShaders();
 	CrearToroidePiso(20, 5, 3, 0.5); // pasillo central
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
-
-	//control audio
-	SoundEngine->setSoundVolume( 0.5 );
-
-	toroidTexture = Texture("Textures/metal.png");
-	toroidTexture.LoadTexture();
 	Texture rocastex = Texture("Textures/rosca1.png");
 	rocastex.LoadTextureA();
 	Texture madera = Texture("Textures/madera.png");
@@ -1118,9 +1111,9 @@ int main()
 	Texture edificio2_tex = Texture("Textures/edificio2.png");
 	edificio2_tex.LoadTextureA();
 	pisoTexture = Texture("Textures/nieve.jpg");
-	pisoTexture.LoadTextureA();
-
-
+	dirtTexture.LoadTextureA();
+	plainTexture = Texture("Textures/plain.png");
+	plainTexture.LoadTextureA();
 	// Modelos
 	Model arbol_central = Model();
 	arbol_central.LoadModel("Modelos_Listos/arbol.obj");
@@ -1134,8 +1127,8 @@ int main()
 	edificio1.LoadModel("Models/edificio1.obj");
 	Model edificio2 = Model();
 	edificio2.LoadModel("Models/edificio2.obj");
-
-
+	pisoTexture = Texture("Textures/piso.tga");
+	pisoTexture.LoadTextureA();
 	// modelo personaje principal
 	Texture padoru_tex = Texture("Textures/padoru.png");
 	padoru_tex.LoadTexture();
@@ -1183,6 +1176,12 @@ int main()
 	skyboxFacesMorning.push_back("Textures/Skybox/morning_up.tga");
 	skyboxFacesMorning.push_back("Textures/Skybox/morning_bk.tga");
 	skyboxFacesMorning.push_back("Textures/Skybox/morning_ft.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
 
 	//skybox = Skybox(skyboxFaces);
 	skyboxNight = Skybox(skyboxFacesNight);
@@ -1202,12 +1201,6 @@ int main()
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
 	/*pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
-		0.0f, 1.0f,
-		2.0f, 1.5f, 1.5f,
-		0.3f, 0.2f, 0.1f);
-	pointLightCount++;*/
-
-	unsigned int spotLightCount = 0;
 	//linterna
 	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
 		0.0f, 2.0f,
@@ -1225,6 +1218,12 @@ int main()
 	//	1.0f, 0.0f, 0.0f,
 	//	15.0f);
 	//spotLightCount++;
+		1.0f, 2.0f,
+		-2.0f, 1.7f, -2.0f,
+		-1.0f, 0.0f, 0.0f,
+		0.5f, 0.01f, 0.0009f,
+		25.0f);
+	spotLightCount++;
 
 
 	
@@ -1279,13 +1278,13 @@ int main()
 		uniformShininess = shaderList[0].GetShininessLocation();
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
-
-		//luz ligada a la cámara de tipo flash 
+		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		//spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights[0].SetPos(glm::vec3(-20.0f + mainWindow.getHelix(), 6.0f + mainWindow.getHeliy(), -1.0));
+		spotLights[1].SetPos( glm::vec3(-5.0f + mainWindow.getmuevex(), 1.7f, 2.0f + mainWindow.getmuevez()) );
+		spotLights[2].SetPos( glm::vec3(-5.0f + mainWindow.getmuevex(), 1.7f, -2.0f + mainWindow.getmuevez()) );
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
@@ -1318,12 +1317,6 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(100.0f, 1.0f, 100.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		pisoTexture.UseTexture();
-		//agregar material al plano de piso
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[2]->RenderMesh();
-
 		// cubo - mesa
 
 		glm::mat4 mesaModel(1.0f);
@@ -1949,6 +1942,12 @@ int main()
 		// pie izquierdo
 		matAux = glm::translate(matAux, glm::vec3(0.258f, -1.54f, -0.057f));
 		matAux = glm::rotate(matAux, qiqiIzqPie * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		toroidTexture.UseTexture();
+		meshList[5]->RenderTorusMesh();
 
 		model = matAux;
 		model = glm::translate(model, glm::vec3(-0.01f, -1.937f, -0.112f));
