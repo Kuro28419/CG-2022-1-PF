@@ -394,6 +394,143 @@ void CrearToroide(int mainSegments, int tubeSegments, float mainRadius, float tu
 	meshList.push_back(torus);
 }
 
+// misma estructura, con mayor numero de repeticion de la textura
+void CrearToroidePiso(int mainSegments, int tubeSegments, float mainRadius, float tubeRadius) { 
+
+	int numVertices = (mainSegments + 1) * (tubeSegments + 1);
+	int primitiveRestartIndex = numVertices;
+	int numIndices = (mainSegments * 2 * (tubeSegments + 1)) + mainSegments - 1;
+	//size_t coordenada = 0;
+
+	//GLfloat* torus_vertices = (GLfloat*)calloc(sizeof(GLfloat*), (numVertices));
+	std::vector<GLfloat> torus_vertices_vector;
+
+	// coordenadas
+	GLfloat mainSegmentAngleStep = glm::radians(360.0f / float(mainSegments));
+	GLfloat tubeSegmentAngleStep = glm::radians(360.0f / float(tubeSegments));
+
+	// texturas
+	GLfloat mainSegmentTextureStep = 16.0f / float(mainSegments);
+	GLfloat tubeSegmentTextureStep = 4.0f / float(tubeSegments);
+	GLfloat currentMainSegmentTexCoordV = 0.0f;
+
+	GLfloat currentMainSegmentAngle = 0.0f;
+	for (size_t i = 0; i <= mainSegments; i++)
+	{
+		// Calculate sine and cosine of main segment angle
+		GLfloat sinMainSegment = sin(currentMainSegmentAngle);
+		GLfloat cosMainSegment = cos(currentMainSegmentAngle);
+		GLfloat currentTubeSegmentAngle = 0.0f;
+
+		// texture coordinate and 
+		GLfloat currentTubeSegmentTexCoordU = 0.0f;
+
+		// normals
+		//GLfloat currentMainSegmentAngle = 0.0f;
+
+		for (size_t j = 0; j <= tubeSegments; j++)
+		{
+			// Calculate sine and cosine of tube segment angle
+			GLfloat sinTubeSegment = sin(currentTubeSegmentAngle);
+			GLfloat cosTubeSegment = cos(currentTubeSegmentAngle);
+
+			// Calculate vertex position on the surface of torus
+				// coordenada x
+			torus_vertices_vector.push_back((mainRadius + tubeRadius * cosTubeSegment) * cosMainSegment);
+			/*torus_vertices[coordenada] = (mainRadius + tubeRadius * cosTubeSegment) * cosMainSegment;
+			coordenada++;*/
+			// coordenada y
+			torus_vertices_vector.push_back((mainRadius + tubeRadius * cosTubeSegment) * sinMainSegment);
+			/*torus_vertices[coordenada] = (mainRadius + tubeRadius * cosTubeSegment) * sinMainSegment;
+			coordenada++;*/
+			//	// coordenada z
+			torus_vertices_vector.push_back(tubeRadius * sinTubeSegment);
+			//torus_vertices[coordenada] = tubeRadius * sinTubeSegment;
+			//coordenada++;
+
+			/*auto surfacePosition = glm::vec3(
+				(mainRadius + tubeRadius * cosTubeSegment) * cosMainSegment,
+				(mainRadius + tubeRadius * cosTubeSegment) * sinMainSegment,
+				tubeRadius * sinTubeSegment);*/
+
+				// texturas
+			torus_vertices_vector.push_back(currentTubeSegmentTexCoordU);
+			/*torus_vertices[coordenada] = currentTubeSegmentTexCoordU;
+			coordenada++;*/
+			torus_vertices_vector.push_back(currentMainSegmentTexCoordV);
+			/*torus_vertices[coordenada] = currentMainSegmentTexCoordV;
+			coordenada++;*/
+			//auto textureCoordinate = glm::vec2(currentTubeSegmentTexCoordU, currentMainSegmentTexCoordV);
+			//_vbo.addData(&textureCoordinate, sizeof(glm::vec2));
+
+			currentTubeSegmentTexCoordU += tubeSegmentTextureStep;
+
+			// normals
+			torus_vertices_vector.push_back(-cosMainSegment * cosTubeSegment);
+			/*torus_vertices[coordenada] = cosMainSegment * cosTubeSegment;
+			coordenada++;*/
+			torus_vertices_vector.push_back(-sinMainSegment * cosTubeSegment);
+			/*torus_vertices[coordenada] = sinMainSegment * cosTubeSegment;
+			coordenada++;*/
+			torus_vertices_vector.push_back(-sinTubeSegment);
+			/*torus_vertices[coordenada] = sinTubeSegment;
+			coordenada++;*/
+			/*auto normal = glm::vec3(
+				cosMainSegment * cosTubeSegment,
+				sinMainSegment * cosTubeSegment,
+				sinTubeSegment
+			);*/
+
+			// Update current tube angle
+			currentTubeSegmentAngle += tubeSegmentAngleStep;
+		}
+
+		// Update main segment angle
+		currentMainSegmentAngle += mainSegmentAngleStep;
+		// texturas
+		currentMainSegmentTexCoordV += mainSegmentTextureStep;
+	}
+
+	// generacion de indices
+
+	std::vector<unsigned int> torus_indices_vector;
+	//unsigned int* torus_indices = (unsigned int*)calloc(sizeof(unsigned int*), numIndices);
+
+	//coordenada = 0;
+
+	GLuint currentVertexOffset = 0;
+	for (size_t i = 0; i < mainSegments; i++)
+	{
+		for (size_t j = 0; j <= tubeSegments; j++)
+		{
+			GLuint vertexIndexA = currentVertexOffset;
+			//_indicesVBO.addData(&vertexIndexA, sizeof(GLuint));
+			torus_indices_vector.push_back(vertexIndexA);
+			/*torus_indices[coordenada] = vertexIndexA;
+			coordenada++;*/
+			GLuint vertexIndexB = currentVertexOffset + tubeSegments + 1;
+			/*torus_indices[coordenada] = vertexIndexB;
+			coordenada++;*/
+			torus_indices_vector.push_back(vertexIndexB);
+			//_indicesVBO.addData(&vertexIndexB, sizeof(GLuint));
+			currentVertexOffset++;
+		}
+
+		// Don't restart primitive, if it's last segment, rendering ends here anyway
+		if (i != mainSegments - 1) {
+			/*torus_indices[coordenada] = primitiveRestartIndex;
+			coordenada++;*/
+			torus_indices_vector.push_back(primitiveRestartIndex);
+			//_indicesVBO.addData(&_primitiveRestartIndex, sizeof(GLuint));
+		}
+	}
+
+
+	Mesh* torus = new Mesh();
+	torus->CreateMesh(&torus_vertices_vector[0], &torus_indices_vector[0], torus_vertices_vector.size(), torus_indices_vector.size(), primitiveRestartIndex);
+	meshList.push_back(torus);
+}
+
 void CrearCilindro(int res, float height, float R) {
 
 	//constantes utilizadas en los ciclos for
@@ -857,6 +994,7 @@ int main()
 	CrearCono( 10, 3, 1 );
 	CrearEsfera( 1, 20 );
 	CreateShaders();
+	CrearToroidePiso(20, 5, 3, 0.5); // pasillo central
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
 
@@ -880,6 +1018,14 @@ int main()
 	pinata_turquesa.LoadTexture();
 	Texture pinata_rojo = Texture("Textures/pinata_rojo.png");
 	pinata_rojo.LoadTexture();
+	Texture pisoBrick = Texture("Textures/piso_hielo_cuad.png");
+	pisoBrick.LoadTextureA();
+	Texture arbol_tex = Texture("Textures/arbol.png");
+	arbol_tex.LoadTexture();
+	Texture candy_tex = Texture("Textures/candy_cane.jpg");
+	candy_tex.LoadTexture();
+	Texture faro_tex = Texture("Textures/faro.png");
+	faro_tex.LoadTexture();
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
 	dirtTexture = Texture("Textures/dirt.png");
@@ -888,21 +1034,28 @@ int main()
 	plainTexture.LoadTextureA();
 	dadoTexture = Texture("Textures/dado.tga");
 	dadoTexture.LoadTextureA();
-	pisoTexture = Texture("Textures/piso.tga");
+	pisoTexture = Texture("Textures/nieve.jpg");
 	pisoTexture.LoadTextureA();
 	Tagave = Texture("Textures/Agave.tga");
 	Tagave.LoadTextureA();
 
 
+	// Modelos
+	Model arbol_central = Model();
+	arbol_central.LoadModel("Modelos_Listos/arbol.obj");
+	Model candy_cane = Model();
+	candy_cane.LoadModel("Modelos_Listos/candy_cane.obj");
+	Model faro = Model();
+	faro.LoadModel("Modelos_Listos/faro.obj");
 
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	skyboxFaces.push_back("Textures/Skybox/night_rt.tga");
+	skyboxFaces.push_back("Textures/Skybox/night_lf.tga");
+	skyboxFaces.push_back("Textures/Skybox/night_dw.tga");
+	skyboxFaces.push_back("Textures/Skybox/night_up.tga");
+	skyboxFaces.push_back("Textures/Skybox/night_bk.tga");
+	skyboxFaces.push_back("Textures/Skybox/night_ft.tga");
 
 	skybox = Skybox(skyboxFaces);
 
@@ -914,7 +1067,7 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.3f, 0.3f,
+		0.3f, 0.3f,//0.3f, 0.3f,
 		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
@@ -993,24 +1146,32 @@ int main()
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
+		// piso
 
 		glm::mat4 model(1.0);
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
+		model = glm::scale(model, glm::vec3(100.0f, 1.0f, 100.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		pisoTexture.UseTexture();
 		//agregar material al plano de piso
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+		//										Modelado geometrico
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+
 		// cubo - mesa
 
 		glm::mat4 mesaModel(1.0f);
 
 		model = glm::mat4(1.0);
-		mesaModel = glm::translate(mesaModel, glm::vec3(0.0f, 0.0f, 0.0f));
+		mesaModel = glm::translate(mesaModel, glm::vec3(0.0f, 2.0f, 100.0f));
+		mesaModel = glm::scale(mesaModel, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(mesaModel, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 0.1f, 4.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1081,7 +1242,7 @@ int main()
 		glm::mat4 pinataModel(1.0f);
 
 		pinataModel = glm::mat4(1.0);
-		pinataModel = glm::translate(pinataModel, glm::vec3(0.0f, 10.0f, 0.0f));
+		pinataModel = glm::translate(pinataModel, glm::vec3(0.0f, 10.0f, 100.0f));
 		model = glm::scale(pinataModel, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		pinata_center.UseTexture();
@@ -1155,6 +1316,16 @@ int main()
 		meshList[9]->RenderFanMesh();
 		meshList[10]->RenderFanMesh();
 
+		// toroide pasillo alrededor
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -2.5f, 0.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pisoBrick.UseTexture();
+		meshList[14]->RenderTorusMesh();
+
 		//// cilindro
 
 		//model = glm::mat4(1.0);
@@ -1183,6 +1354,136 @@ int main()
 		//meshList[11]->RenderMesh();
 		//meshList[12]->RenderTorusMesh();
 		//meshList[13]->RenderMesh();
+
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+		//									Uso de modelos optimizados.
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+
+		// arbol central
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(25.0f, 25.0f, 25.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbol_tex.UseTexture();
+		arbol_central.RenderModel();
+
+		// bastones de caramelo al rededor del arbol
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 2.0f, -60.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		candy_tex.UseTexture();
+		candy_cane.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 2.0f, 60.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		candy_tex.UseTexture();
+		candy_cane.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(60*toRadians) * 60.0f, 2.0f, cos(60*toRadians) * 60.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		candy_tex.UseTexture();
+		candy_cane.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(120 * toRadians) * 60.0f, 2.0f, cos(120 * toRadians) * 60.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		candy_tex.UseTexture();
+		candy_cane.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-sin(60 * toRadians) * 60.0f, 2.0f, -cos(60 * toRadians) * 60.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		candy_tex.UseTexture();
+		candy_cane.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-sin(120 * toRadians) * 60.0f, 2.0f, -cos(120 * toRadians) * 60.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		candy_tex.UseTexture();
+		candy_cane.RenderModel();
+
+		// faros
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 2.0f, -110.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		faro_tex.UseTexture();
+		faro.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 2.0f, 110.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		faro_tex.UseTexture();
+		faro.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(60 * toRadians) * 110.0f, 2.0f, cos(60 * toRadians) * 110.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		faro_tex.UseTexture();
+		faro.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(120 * toRadians) * 110.0f, 2.0f, cos(120 * toRadians) * 110.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		faro_tex.UseTexture();
+		faro.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-sin(60 * toRadians) * 110.0f, 2.0f, -cos(60 * toRadians) * 110.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		faro_tex.UseTexture();
+		faro.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-sin(120 * toRadians) * 110.0f, 2.0f, -cos(120 * toRadians) * 110.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		faro_tex.UseTexture();
+		faro.RenderModel();
+
 
 		glUseProgram(0);
 
