@@ -56,6 +56,7 @@ Texture toroidTexture;
 
 
 Model Dado_M;
+Model qiqi;
 
 Skybox skybox;
 
@@ -861,6 +862,24 @@ int main()
 
 	toroidTexture = Texture("Textures/metal.png");
 	toroidTexture.LoadTexture();
+	Texture rocastex = Texture("Textures/rosca1.png");
+	rocastex.LoadTextureA();
+	Texture madera = Texture("Textures/madera.png");
+	madera.LoadTexture();
+	Texture pinata_center = Texture("Textures/pinata.png");
+	pinata_center.LoadTexture();
+	Texture pinata_barro = Texture("Textures/pinata_barro.png");
+	pinata_barro.LoadTexture();
+	Texture pinata_rosa = Texture("Textures/pinata_rosa.png");
+	pinata_rosa.LoadTexture();
+	Texture pinata_azul = Texture("Textures/pinata_azul.png");
+	pinata_azul.LoadTexture();
+	Texture pinata_verde = Texture("Textures/pinata_verde.png");
+	pinata_verde.LoadTexture();
+	Texture pinata_turquesa = Texture("Textures/pinata_turquesa.png");
+	pinata_turquesa.LoadTexture();
+	Texture pinata_rojo = Texture("Textures/pinata_rojo.png");
+	pinata_rojo.LoadTexture();
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
 	dirtTexture = Texture("Textures/dirt.png");
@@ -873,10 +892,6 @@ int main()
 	pisoTexture.LoadTextureA();
 	Tagave = Texture("Textures/Agave.tga");
 	Tagave.LoadTextureA();
-
-
-	Dado_M = Model();
-	Dado_M.LoadModel("Models/dadoanimales.obj");
 
 
 
@@ -920,14 +935,14 @@ int main()
 		5.0f);
 	spotLightCount++;
 
-	//luz fija
-	spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
-		1.0f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		15.0f);
-	spotLightCount++;
+	////luz fija
+	//spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
+	//	1.0f, 2.0f,
+	//	5.0f, 10.0f, 0.0f,
+	//	0.0f, -5.0f, 0.0f,
+	//	1.0f, 0.0f, 0.0f,
+	//	15.0f);
+	//spotLightCount++;
 
 
 	
@@ -990,43 +1005,184 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
-		// toroide
+		// cubo - mesa
+
+		glm::mat4 mesaModel(1.0f);
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 10.0f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		mesaModel = glm::translate(mesaModel, glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::rotate(mesaModel, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 0.1f, 4.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		pisoTexture.UseTexture();
-		meshList[5]->RenderTorusMesh();
+		madera.UseTexture();
+		//agregar material al plano de piso
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
 
-		// cilindro
+		// cilindro - pata mesa 1
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 30.0f, 0.0f));
+		model = glm::translate(mesaModel, glm::vec3(1.8f, -0.8f, 0.8f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.25f, 0.1f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		toroidTexture.UseTexture();
+		madera.UseTexture();
 		meshList[6]->RenderStripMesh();
 		meshList[7]->RenderFanMesh();
 		meshList[8]->RenderFanMesh();
 
-		// cono
+		// cilindro - pata mesa 2
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 30.0f, -10.0f));
+		model = glm::translate(mesaModel, glm::vec3(-1.8f, -0.8f, 0.8f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.25f, 0.1f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		toroidTexture.UseTexture();
-		meshList[9]->RenderFanMesh();
-		meshList[10]->RenderFanMesh();
+		madera.UseTexture();
+		meshList[6]->RenderStripMesh();
+		meshList[7]->RenderFanMesh();
+		meshList[8]->RenderFanMesh();
 
-		// esfera
+		// cilindro - pata mesa 3
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(10.0f, 30.0f, 0.0f));
+		model = glm::translate(mesaModel, glm::vec3(1.8f, -0.8f, -0.8f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.25f, 0.1f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		toroidTexture.UseTexture();
+		madera.UseTexture();
+		meshList[6]->RenderStripMesh();
+		meshList[7]->RenderFanMesh();
+		meshList[8]->RenderFanMesh();
+
+		// cilindro - pata mesa 4
+
+		model = glm::mat4(1.0);
+		model = glm::translate(mesaModel, glm::vec3(-1.8f, -0.8f, -0.8f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.25f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		madera.UseTexture();
+		meshList[6]->RenderStripMesh();
+		meshList[7]->RenderFanMesh();
+		meshList[8]->RenderFanMesh();
+
+		// toroide - rosca
+
+		model = glm::mat4(1.0);
+		model = glm::translate(mesaModel, glm::vec3(0.0f, 0.3f, 0.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 0.3f, 0.3f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		rocastex.UseTexture();
+		meshList[5]->RenderTorusMesh();
+
+
+		/****************************************************************************************************/
+
+		// esfera - piñata
+
+		glm::mat4 pinataModel(1.0f);
+
+		pinataModel = glm::mat4(1.0);
+		pinataModel = glm::translate(pinataModel, glm::vec3(0.0f, 10.0f, 0.0f));
+		model = glm::scale(pinataModel, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pinata_center.UseTexture();
 		meshList[11]->RenderMesh();
 		meshList[12]->RenderTorusMesh();
 		meshList[13]->RenderMesh();
+
+		// cono - piñata 1 inferior
+
+		model = pinataModel;
+		model = glm::translate(model, glm::vec3(0.0f, -0.7f, 0.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.7f, 0.9f, 0.7f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pinata_turquesa.UseTexture();
+		meshList[9]->RenderFanMesh();
+		meshList[10]->RenderFanMesh();
+
+		// cono - piñata 2 superior
+
+		model = pinataModel;
+		model = glm::translate(model, glm::vec3(0.0f, 1.7f, 0.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.7f, 0.9f, 0.7f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pinata_barro.UseTexture();
+		meshList[9]->RenderFanMesh();
+		meshList[10]->RenderFanMesh();
+
+		// cono - piñata 3
+
+		model = pinataModel;
+		model = glm::translate(model, glm::vec3(0.0f, cos(40)*0.7f, sin(40)*0.7f));
+		model = glm::rotate(model, 125 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.7f, 0.9f, 0.7f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pinata_verde.UseTexture();
+		meshList[9]->RenderFanMesh();
+		meshList[10]->RenderFanMesh();
+
+		// cono - piñata 4
+
+		model = pinataModel;
+		model = glm::translate(model, glm::vec3(0.0f, cos(40) * 0.7f, -sin(40) * 0.7f));
+		model = glm::rotate(model, -125 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.7f, 0.9f, 0.7f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pinata_azul.UseTexture();
+		meshList[9]->RenderFanMesh();
+		meshList[10]->RenderFanMesh();
+
+		// cono - piñata 5
+
+		model = pinataModel;
+		model = glm::translate(model, glm::vec3( sin(70) * -0.7f, cos(70) * 0.7f, 0.0f));
+		model = glm::rotate(model, 70 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.7f, 0.9f, 0.7f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pinata_rojo.UseTexture();
+		meshList[9]->RenderFanMesh();
+		meshList[10]->RenderFanMesh();
+
+		// cono - piñata 6
+
+		model = pinataModel;
+		model = glm::translate(model, glm::vec3( sin(70) * 0.7f, cos(70) * 0.7f, 0.0f));
+		model = glm::rotate(model, -70 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.7f, 0.9f, 0.7f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		pinata_rosa.UseTexture();
+		meshList[9]->RenderFanMesh();
+		meshList[10]->RenderFanMesh();
+
+		//// cilindro
+
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 30.0f, 0.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//toroidTexture.UseTexture();
+		//meshList[6]->RenderStripMesh();
+		//meshList[7]->RenderFanMesh();
+		//meshList[8]->RenderFanMesh();
+
+		//// cono
+
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f, 30.0f, -10.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//toroidTexture.UseTexture();
+		//meshList[9]->RenderFanMesh();
+		//meshList[10]->RenderFanMesh();
+
+		//// esfera
+
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(10.0f, 30.0f, 0.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//toroidTexture.UseTexture();
+		//meshList[11]->RenderMesh();
+		//meshList[12]->RenderTorusMesh();
+		//meshList[13]->RenderMesh();
 
 		glUseProgram(0);
 
