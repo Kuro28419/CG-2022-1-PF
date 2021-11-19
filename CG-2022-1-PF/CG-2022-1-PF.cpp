@@ -1026,6 +1026,8 @@ int main()
 	candy_tex.LoadTexture();
 	Texture faro_tex = Texture("Textures/faro.png");
 	faro_tex.LoadTexture();
+	Texture bush_tex = Texture("Textures/bush.png");
+	bush_tex.LoadTexture();
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
 	dirtTexture = Texture("Textures/dirt.png");
@@ -1047,6 +1049,8 @@ int main()
 	candy_cane.LoadModel("Modelos_Listos/candy_cane.obj");
 	Model faro = Model();
 	faro.LoadModel("Modelos_Listos/faro.obj");
+	Model bush = Model();
+	bush.LoadModel("Models/bush.obj");
 
 
 	std::vector<std::string> skyboxFaces;
@@ -1364,7 +1368,7 @@ int main()
 		// arbol central
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(25.0f, 25.0f, 25.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1375,8 +1379,8 @@ int main()
 		// bastones de caramelo al rededor del arbol
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 2.0f, -60.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 4.0f, -60.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1384,8 +1388,8 @@ int main()
 		candy_cane.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 2.0f, 60.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 4.0f, 60.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1393,8 +1397,8 @@ int main()
 		candy_cane.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(sin(60*toRadians) * 60.0f, 2.0f, cos(60*toRadians) * 60.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(sin(60*toRadians) * 60.0f, 4.0f, cos(60*toRadians) * 60.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1402,8 +1406,8 @@ int main()
 		candy_cane.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(sin(120 * toRadians) * 60.0f, 2.0f, cos(120 * toRadians) * 60.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(sin(120 * toRadians) * 60.0f, 4.0f, cos(120 * toRadians) * 60.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1411,8 +1415,8 @@ int main()
 		candy_cane.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-sin(60 * toRadians) * 60.0f, 2.0f, -cos(60 * toRadians) * 60.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(-sin(60 * toRadians) * 60.0f, 4.0f, -cos(60 * toRadians) * 60.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1420,8 +1424,8 @@ int main()
 		candy_cane.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-sin(120 * toRadians) * 60.0f, 2.0f, -cos(120 * toRadians) * 60.0f));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(-sin(120 * toRadians) * 60.0f, 4.0f, -cos(120 * toRadians) * 60.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1431,7 +1435,7 @@ int main()
 		// faros
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 2.0f, -110.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -1.5f, -110.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1440,7 +1444,7 @@ int main()
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 2.0f, 110.0f));
+		model = glm::translate(model, glm::vec3(0.0f, -1.5f, 110.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1449,7 +1453,7 @@ int main()
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(sin(60 * toRadians) * 110.0f, 2.0f, cos(60 * toRadians) * 110.0f));
+		model = glm::translate(model, glm::vec3(sin(60 * toRadians) * 110.0f, -1.5f, cos(60 * toRadians) * 110.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1458,7 +1462,7 @@ int main()
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(sin(120 * toRadians) * 110.0f, 2.0f, cos(120 * toRadians) * 110.0f));
+		model = glm::translate(model, glm::vec3(sin(120 * toRadians) * 110.0f, -1.5f, cos(120 * toRadians) * 110.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1467,7 +1471,7 @@ int main()
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-sin(60 * toRadians) * 110.0f, 2.0f, -cos(60 * toRadians) * 110.0f));
+		model = glm::translate(model, glm::vec3(-sin(60 * toRadians) * 110.0f, -1.5f, -cos(60 * toRadians) * 110.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1476,7 +1480,7 @@ int main()
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-sin(120 * toRadians) * 110.0f, 2.0f, -cos(120 * toRadians) * 110.0f));
+		model = glm::translate(model, glm::vec3(-sin(120 * toRadians) * 110.0f, -1.5f, -cos(120 * toRadians) * 110.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1484,6 +1488,65 @@ int main()
 		faro_tex.UseTexture();
 		faro.RenderModel();
 
+		// arbustos centrales
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-60.0f, 2.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bush_tex.UseTexture();
+		bush.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(60.0f, 2.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bush_tex.UseTexture();
+		bush.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(30 * toRadians) * 60.0f, 2.0f, cos(30 * toRadians) * 60.0f));
+		model = glm::rotate(model, -60 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bush_tex.UseTexture();
+		bush.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(150 * toRadians) * 60.0f, 2.0f, cos(150 * toRadians) * 60.0f));
+		model = glm::rotate(model, -120 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bush_tex.UseTexture();
+		bush.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-sin(30 * toRadians) * 60.0f, 2.0f, -cos(30 * toRadians) * 60.0f));
+		model = glm::rotate(model, 120 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bush_tex.UseTexture();
+		bush.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-sin(150 * toRadians) * 60.0f, 2.0f, -cos(150 * toRadians) * 60.0f));
+		model = glm::rotate(model, 60 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bush_tex.UseTexture();
+		bush.RenderModel();
 
 		glUseProgram(0);
 
