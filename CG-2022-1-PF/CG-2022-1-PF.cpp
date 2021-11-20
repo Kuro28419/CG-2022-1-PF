@@ -1028,6 +1028,10 @@ int main()
 	faro_tex.LoadTexture();
 	Texture bush_tex = Texture("Textures/bush.png");
 	bush_tex.LoadTexture();
+	Texture edificio1_tex = Texture("Textures/edificio1.png");
+	edificio1_tex.LoadTextureA();
+	Texture edificio2_tex = Texture("Textures/edificio2.png");
+	edificio2_tex.LoadTextureA();
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
 	dirtTexture = Texture("Textures/dirt.png");
@@ -1051,7 +1055,10 @@ int main()
 	faro.LoadModel("Modelos_Listos/faro.obj");
 	Model bush = Model();
 	bush.LoadModel("Models/bush.obj");
-
+	Model edificio1 = Model();
+	edificio1.LoadModel("Models/edificio1.obj");
+	Model edificio2 = Model();
+	edificio2.LoadModel("Models/edificio2.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/night_rt.tga");
@@ -1376,6 +1383,9 @@ int main()
 		arbol_tex.UseTexture();
 		arbol_central.RenderModel();
 
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+
 		// bastones de caramelo al rededor del arbol
 
 		model = glm::mat4(1.0);
@@ -1432,6 +1442,9 @@ int main()
 		candy_tex.UseTexture();
 		candy_cane.RenderModel();
 
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+
 		// faros
 
 		model = glm::mat4(1.0);
@@ -1487,6 +1500,9 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
 		faro.RenderModel();
+
+		/****************************************************************************************************/
+		/****************************************************************************************************/
 
 		// arbustos centrales
 
@@ -1547,6 +1563,53 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		bush_tex.UseTexture();
 		bush.RenderModel();
+
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+
+		// edificios
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 180.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(40.0f, 40.0f, 40.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		edificio1_tex.UseTexture();
+		edificio1.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -2.0f, -180.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(40.0f, 40.0f, 40.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		edificio2_tex.UseTexture();
+		edificio2.RenderModel();
+		
+		/*///////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(60 * toRadians) * 180.0f, -2.0f, cos(60 * toRadians) * 180.0f));
+		model = glm::rotate(model, 135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(40.0f, 40.0f, 40.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		edificio1_tex.UseTexture();
+		edificio1.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(60 * toRadians) * -180.0f, -2.0f, -cos(60 * toRadians) * -180.0f));
+		model = glm::rotate(model, 135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(40.0f, 40.0f, 40.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		edificio2_tex.UseTexture();
+		edificio2.RenderModel();
 
 		glUseProgram(0);
 
