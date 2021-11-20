@@ -13,12 +13,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 {
 	width = windowWidth;
 	height = windowHeight;
-	muevex = 2.0f;
-	muevez = 0.0f;
-	wheelRot = 0.0f;
-	Helix = 0.0f;
-	Heliy = 0.0f;
-	HeliBlades = 0.0f;
+	mainStart = false;
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -109,51 +104,10 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
-	if (key == GLFW_KEY_Y)
+	
+	if (key == GLFW_KEY_1)
 	{
-		theWindow-> muevex -= 1.0;
-	}
-	if (key == GLFW_KEY_U)
-	{
-		theWindow-> muevex += 1.0;
-	}
-	if (key == GLFW_KEY_H)
-	{
-		theWindow->muevez -= 1.0;
-	}
-	if (key == GLFW_KEY_J)
-	{
-		theWindow->muevez += 1.0;
-	}
-	if (key == GLFW_KEY_N)
-	{
-		theWindow->wheelRot -= 1.0;
-	}
-	if (key == GLFW_KEY_M)
-	{
-		theWindow->wheelRot += 1.0;
-	}
-
-
-	if (key == GLFW_KEY_KP_8)
-	{
-		theWindow->Heliy += 1.0;
-	}
-	if (key == GLFW_KEY_KP_2)
-	{
-		theWindow->Heliy -= 1.0;
-	}
-	if (key == GLFW_KEY_KP_6)
-	{
-		theWindow->Helix += 1.0;
-	}
-	if (key == GLFW_KEY_KP_4)
-	{
-		theWindow->Helix -= 1.0;
-	}
-	if (key == GLFW_KEY_KP_9)
-	{
-		theWindow->HeliBlades += 10.0;
+		theWindow->mainStart = true;
 	}
 
 

@@ -29,6 +29,7 @@ Cambios en el shader, en lugar de enviar la textura en el shader de fragmentos, 
 #include "Sphere.h"
 #include"Model.h"
 #include "Skybox.h"
+#include "include/irrKlang.h"
 
 
 //para iluminación
@@ -36,6 +37,8 @@ Cambios en el shader, en lugar de enviar la textura en el shader de fragmentos, 
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "Material.h"
+
+irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
 
 const float PI = 3.14159265f;
 const float toRadians = 3.14159265f / 180.0f;
@@ -80,6 +83,17 @@ static double limitFPS = 1.0 / 60.0;
 //control del ciclo dia y noche.
 GLfloat tiempo = 0.2f;
 GLfloat tiempoOffset = 0.00025f;
+
+//control personaje principal
+float padoruAngle = 0.0;
+float padoruAngleOffset = 0.5;
+float padoruExtrAngle = 0.0;
+float padoruExtrAngleOffset = 0.5;
+float padoruJumpAngle = 0.0f;
+float padoruJumpAngleOffset = 2.0f;
+float padoruJumpY = 0.0f;
+float padoruJumpYOffset = 0.3f;
+bool padoruSoundDone = false;
 
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
@@ -984,7 +998,45 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
+/****************************************************************************************************/
+/****************************************************************************************************/
+//										Funciones de animacion
+/****************************************************************************************************/
+/****************************************************************************************************/
 
+// animacion personaje principal
+void padoruAnimation() {
+	if (!padoruSoundDone) {
+		SoundEngine->play2D("Sounds/padoru_sound.mp3");
+		padoruSoundDone = true;
+	}
+	padoruAngle += padoruAngleOffset * deltaTime;
+	if (padoruAngle >= 360.0) {
+		padoruAngle = 0.0;
+		padoruSoundDone = false;
+		mainWindow.setMainStart(false);
+	}
+
+	if (padoruExtrAngle >= 20.0 or padoruExtrAngle <= -20.0) {
+		padoruExtrAngleOffset = -padoruExtrAngleOffset;
+	}
+
+	if (padoruAngle > 180 and padoruAngle < 270) { // 90 grados para saltar
+		padoruJumpAngle += padoruJumpAngleOffset * deltaTime;
+		if (padoruAngle < 225) {
+			padoruJumpY += padoruJumpYOffset*deltaTime;
+		}
+		else {
+			padoruJumpY -= padoruJumpYOffset*deltaTime;
+		}
+
+		if (padoruAngle >= 270) {
+			padoruJumpAngle = 0.0f;
+			padoruJumpY = 0.0f;
+		}
+	}
+	padoruExtrAngle += padoruExtrAngleOffset;
+}
 
 int main()
 {
@@ -1000,7 +1052,10 @@ int main()
 	CreateShaders();
 	CrearToroidePiso(20, 5, 3, 0.5); // pasillo central
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 10.0f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
+
+	//control audio
+	SoundEngine->setSoundVolume( 0.5 );
 
 	toroidTexture = Texture("Textures/metal.png");
 	toroidTexture.LoadTexture();
@@ -1063,6 +1118,24 @@ int main()
 	edificio1.LoadModel("Models/edificio1.obj");
 	Model edificio2 = Model();
 	edificio2.LoadModel("Models/edificio2.obj");
+
+
+	// modelo personaje principal
+	Texture padoru_tex = Texture("Textures/padoru.png");
+	padoru_tex.LoadTexture();
+	Model padoru_cuerpo = Model();
+	padoru_cuerpo.LoadModel("Models/Padoru/cuerpo.obj");
+	Model padoru_cabeza = Model();
+	padoru_cabeza.LoadModel("Models/Padoru/cabeza.obj");
+	Model padoru_brazo_der = Model();
+	padoru_brazo_der.LoadModel("Models/Padoru/brazo_der.obj");
+	Model padoru_brazo_izq = Model();
+	padoru_brazo_izq.LoadModel("Models/Padoru/brazo_izq.obj");
+	Model padoru_pierna_der = Model();
+	padoru_pierna_der.LoadModel("Models/Padoru/pierna_der.obj");
+	Model padoru_pierna_izq = Model();
+	padoru_pierna_izq.LoadModel("Models/Padoru/pierna_izq.obj");
+	
 
 	std::vector<std::string> skyboxFacesNight;
 	skyboxFacesNight.push_back("Textures/Skybox/night_rt.tga");
@@ -1188,6 +1261,24 @@ int main()
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+		//										Control animaciones
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+
+		// control personje principal
+		if ( mainWindow.getMainStart() ) {
+			padoruAnimation();
+		}
+		
+
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+		//										Modelado geometrico
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+
 		// piso
 
 		glm::mat4 model(1.0);
@@ -1201,15 +1292,10 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 
-		/****************************************************************************************************/
-		/****************************************************************************************************/
-		//										Modelado geometrico
-		/****************************************************************************************************/
-		/****************************************************************************************************/
-
 		// cubo - mesa
 
 		glm::mat4 mesaModel(1.0f);
+		glm::mat4 matAux(1.0f);
 
 		model = glm::mat4(1.0);
 		mesaModel = glm::translate(mesaModel, glm::vec3(0.0f, 2.0f, 100.0f));
@@ -1367,6 +1453,16 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		pisoBrick.UseTexture();
 		meshList[14]->RenderTorusMesh();
+
+		//// toroide
+
+		//model = glm::mat4(1.0);
+		//model = glm::translate(mesaModel, glm::vec3(0.0f, 0.3f, 0.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.4f, 0.3f, 0.3f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//rocastex.UseTexture();
+		//meshList[5]->RenderTorusMesh();
 
 		//// cilindro
 
@@ -1663,6 +1759,100 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		edificio1_tex.UseTexture();
 		edificio1.RenderModel();
+
+
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+		//										personaje principal
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+		
+		glm::mat4 padoruModel(1.0f);
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(padoruAngle * toRadians) * 90.0f, 3.7f + padoruJumpY, cos(padoruAngle * toRadians) * 90.0f));
+		model = glm::rotate(model, -(90 - padoruAngle + padoruJumpAngle) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		padoruModel = model;
+		//model = glm::rotate(model, 10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		padoru_tex.UseTexture();
+		padoru_cuerpo.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(padoruModel, glm::vec3(0.0f, 6.5f, 0.0f));
+		//model = glm::rotate(model, 10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		padoru_tex.UseTexture();
+		padoru_cabeza.RenderModel();
+		
+		// brazo derecho
+		model = glm::mat4(1.0);
+		model = glm::translate(padoruModel, glm::vec3(1.5f, 1.5f, 0.3f));
+		model = glm::rotate(model, padoruExtrAngle * toRadians, glm::vec3(1.0f, 0.0f, 0.0f)); // rotacion animada
+		matAux = model;
+
+		model = glm::translate(matAux, glm::vec3(2.0f, -1.3f, -1.5f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		padoru_tex.UseTexture();
+		padoru_brazo_der.RenderModel();
+
+		// brazo izquierdo
+		model = glm::mat4(1.0);
+		model = glm::translate(padoruModel, glm::vec3(-1.5f, 1.5f, 0.3f));
+		model = glm::rotate(model, -padoruExtrAngle * toRadians, glm::vec3(1.0f, 0.0f, 0.0f)); // rotacion animada
+		matAux = model;
+
+		model = glm::mat4(1.0);
+		model = glm::translate(matAux, glm::vec3(-2.0f, -1.3f, -1.5f));
+		//model = glm::rotate(model, 10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		padoru_tex.UseTexture();
+		padoru_brazo_izq.RenderModel();
+
+		// pie derecho
+		model = glm::mat4(1.0);
+		model = glm::translate(padoruModel, glm::vec3(1.2f, -1.5f, -0.24f));
+		model = glm::rotate(model, -padoruExtrAngle * toRadians, glm::vec3(1.0f, 0.0f, 0.0f)); // rotacion animada
+		matAux = model;
+
+		model = glm::mat4(1.0);
+		model = glm::translate(matAux, glm::vec3(0.0f, -1.2f, 0.0f));
+		//model = glm::rotate(model, 10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		padoru_tex.UseTexture();
+		padoru_pierna_der.RenderModel();
+
+		// pie izquierdo
+		model = glm::mat4(1.0);
+		model = glm::translate(padoruModel, glm::vec3(-1.2f, -1.5f, -0.24f));
+		model = glm::rotate(model, padoruExtrAngle * toRadians, glm::vec3(1.0f, 0.0f, 0.0f)); // rotacion animada
+		matAux = model;
+
+		model = glm::mat4(1.0);
+		model = glm::translate(matAux, glm::vec3(0.0f, -1.2f, 0.0f));
+		//model = glm::rotate(model, 10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		padoru_tex.UseTexture();
+		padoru_pierna_izq.RenderModel();
 
 		glUseProgram(0);
 
