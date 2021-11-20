@@ -58,7 +58,8 @@ Texture toroidTexture;
 Model Dado_M;
 Model qiqi;
 
-Skybox skybox;
+Skybox skyboxNight;
+Skybox skyboxMorning;
 
 //materiales
 Material Material_brillante;
@@ -76,6 +77,9 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
+//control del ciclo dia y noche.
+GLfloat tiempo = 0.2f;
+GLfloat tiempoOffset = 0.00025f;
 
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
@@ -1060,15 +1064,25 @@ int main()
 	Model edificio2 = Model();
 	edificio2.LoadModel("Models/edificio2.obj");
 
-	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/night_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/night_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/night_dw.tga");
-	skyboxFaces.push_back("Textures/Skybox/night_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/night_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/night_ft.tga");
+	std::vector<std::string> skyboxFacesNight;
+	skyboxFacesNight.push_back("Textures/Skybox/night_rt.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/night_lf.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/night_dw.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/night_up.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/night_bk.tga");
+	skyboxFacesNight.push_back("Textures/Skybox/night_ft.tga");
 
-	skybox = Skybox(skyboxFaces);
+	std::vector<std::string> skyboxFacesMorning;
+	skyboxFacesMorning.push_back("Textures/Skybox/morning_rt.tga");
+	skyboxFacesMorning.push_back("Textures/Skybox/morning_lf.tga");
+	skyboxFacesMorning.push_back("Textures/Skybox/morning_dw.tga");
+	skyboxFacesMorning.push_back("Textures/Skybox/morning_up.tga");
+	skyboxFacesMorning.push_back("Textures/Skybox/morning_bk.tga");
+	skyboxFacesMorning.push_back("Textures/Skybox/morning_ft.tga");
+
+	//skybox = Skybox(skyboxFaces);
+	skyboxNight = Skybox(skyboxFacesNight);
+	skyboxMorning = Skybox(skyboxFacesMorning);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -1077,9 +1091,9 @@ int main()
 	glm::vec3 posblackhawk = glm::vec3(-20.0f, 6.0f, -1.0);
 
 	//luz direccional, sólo 1 y siempre debe de existir
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.3f, 0.3f,//0.3f, 0.3f,
-		0.0f, 0.0f, -1.0f);
+	//mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+	//	tiempo, 0.3f,//0.3f, 0.3f,
+	//	0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
@@ -1124,6 +1138,16 @@ int main()
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
 
+		// control del tiempo
+		mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+			tiempo, 0.3f,//0.3f, 0.3f,
+			0.0f, 0.0f, -1.0f);
+		if (tiempo < 0.1 or tiempo > 1.0) {
+			tiempoOffset = -tiempoOffset;
+		}
+		tiempo += tiempoOffset*deltaTime;
+
+
 		//Recibir eventos del usuario
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
@@ -1132,7 +1156,14 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		// control de escenario del tiempo
+		//skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		if (tiempo < 0.6f) {
+			skyboxNight.DrawSkybox(camera.calculateViewMatrix(), projection);
+		}
+		else {
+			skyboxMorning.DrawSkybox(camera.calculateViewMatrix(), projection);
+		}
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
