@@ -1593,7 +1593,29 @@ int main()
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(sin(60 * toRadians) * 180.0f, -2.0f, cos(60 * toRadians) * 180.0f));
-		model = glm::rotate(model, 135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(40.0f, 40.0f, 40.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		edificio2_tex.UseTexture();
+		edificio2.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(sin(60 * toRadians) * -180.0f, -2.0f, -cos(60 * toRadians) * -180.0f));
+		model = glm::rotate(model, -10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(40.0f, 40.0f, 40.0f));
+		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		edificio2_tex.UseTexture();
+		edificio2.RenderModel();
+
+		/*///////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-sin(60 * toRadians) * 180.0f, -2.0f, -cos(60 * toRadians) * 180.0f));
+		model = glm::rotate(model, 10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(40.0f, 40.0f, 40.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1602,14 +1624,14 @@ int main()
 		edificio1.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(sin(60 * toRadians) * -180.0f, -2.0f, -cos(60 * toRadians) * -180.0f));
-		model = glm::rotate(model, 135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-sin(60 * toRadians) * -180.0f, -2.0f, cos(60 * toRadians) * -180.0f));
+		model = glm::rotate(model, -10 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(40.0f, 40.0f, 40.0f));
 		//model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		edificio2_tex.UseTexture();
-		edificio2.RenderModel();
+		edificio1_tex.UseTexture();
+		edificio1.RenderModel();
 
 		glUseProgram(0);
 
