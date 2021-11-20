@@ -59,7 +59,6 @@ Texture toroidTexture;
 
 
 Model Dado_M;
-Model qiqi;
 
 Skybox skyboxNight;
 Skybox skyboxMorning;
@@ -89,11 +88,23 @@ float padoruAngle = 0.0;
 float padoruAngleOffset = 0.5;
 float padoruExtrAngle = 0.0;
 float padoruExtrAngleOffset = 0.5;
-float padoruJumpAngle = 0.0f;
-float padoruJumpAngleOffset = 2.0f;
-float padoruJumpY = 0.0f;
-float padoruJumpYOffset = 0.3f;
+float padoruJumpAngle = 0.0;
+float padoruJumpAngleOffset = 2.0;
+float padoruJumpY = 0.0;
+float padoruJumpYOffset = 0.3;
 bool padoruSoundDone = false;
+
+// control ciclo hutao y qiqi
+glm::mat4 QHCicleCenter(1.0);
+
+//control Qiqi
+float qiqiDerPie = -30.0;
+float qiqiDerMuslo = 0.0;
+float qiqiIzqPie = -30.0;
+float qiqiIzqMuslo = 0.0;
+float qiqiExtrAngleOffset = 2.0;
+float qiqiAngle = 0.0;
+float qiqiAngleOffset = 1.0;
 
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
@@ -1091,18 +1102,8 @@ int main()
 	edificio1_tex.LoadTextureA();
 	Texture edificio2_tex = Texture("Textures/edificio2.png");
 	edificio2_tex.LoadTextureA();
-	brickTexture = Texture("Textures/brick.png");
-	brickTexture.LoadTextureA();
-	dirtTexture = Texture("Textures/dirt.png");
-	dirtTexture.LoadTextureA();
-	plainTexture = Texture("Textures/plain.png");
-	plainTexture.LoadTextureA();
-	dadoTexture = Texture("Textures/dado.tga");
-	dadoTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/nieve.jpg");
 	pisoTexture.LoadTextureA();
-	Tagave = Texture("Textures/Agave.tga");
-	Tagave.LoadTextureA();
 
 
 	// Modelos
@@ -1135,6 +1136,21 @@ int main()
 	padoru_pierna_der.LoadModel("Models/Padoru/pierna_der.obj");
 	Model padoru_pierna_izq = Model();
 	padoru_pierna_izq.LoadModel("Models/Padoru/pierna_izq.obj");
+
+	// modelo Qiqi
+	Texture qiqi_tex = Texture("Textures/qiqi.png");
+	qiqi_tex.LoadTexture();
+	Model qiqi_cuerpo = Model();
+	qiqi_cuerpo.LoadModel("Models/qiqi/qiqi_cuerpo.obj");
+	Model qiqi_muslo_der = Model();
+	qiqi_muslo_der.LoadModel("Models/qiqi/qiqi_muslo_der.obj");
+	Model qiqi_muslo_izq = Model();
+	qiqi_muslo_izq.LoadModel("Models/qiqi/qiqi_muslo_izq.obj");
+	Model qiqi_patorrilla_der = Model();
+	qiqi_patorrilla_der.LoadModel("Models/qiqi/qiqi_pantorrilla_der.obj");
+	Model qiqi_patorrilla_izq = Model();
+	qiqi_patorrilla_izq.LoadModel("Models/qiqi/qiqi_pantorrilla_izq.obj");
+	
 	
 
 	std::vector<std::string> skyboxFacesNight;
@@ -1202,7 +1218,7 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	
-	
+	lastTime = glfwGetTime();
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
@@ -1271,7 +1287,19 @@ int main()
 		if ( mainWindow.getMainStart() ) {
 			padoruAnimation();
 		}
-		
+
+		if (qiqiAngle >= 360) {
+			qiqiAngle = 0.0;
+		}
+
+		if (qiqiDerMuslo > 30.0 or qiqiDerMuslo < -30.0) {
+			qiqiExtrAngleOffset = -qiqiExtrAngleOffset;
+		}
+		qiqiDerMuslo += qiqiExtrAngleOffset * deltaTime;
+		qiqiDerPie += qiqiExtrAngleOffset * deltaTime;
+		qiqiIzqMuslo -= qiqiExtrAngleOffset * deltaTime;
+		qiqiIzqPie -= qiqiExtrAngleOffset * deltaTime;
+		qiqiAngle += qiqiAngleOffset * deltaTime;
 
 		/****************************************************************************************************/
 		/****************************************************************************************************/
@@ -1853,6 +1881,78 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		padoru_tex.UseTexture();
 		padoru_pierna_izq.RenderModel();
+
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+		//										Qiqi y Hu Tao
+		/****************************************************************************************************/
+		/****************************************************************************************************/
+
+		QHCicleCenter = glm::mat4(1.0);
+		QHCicleCenter = glm::translate(QHCicleCenter, glm::vec3(-140.0f, 6.0f, 0.0f)); //  matriz central sobre la que se jerarquizaran los modelos.
+
+		// Qiqi
+
+		glm::mat4 qiqiCent(1.0);
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(QHCicleCenter, glm::vec3(sin(qiqiAngle * toRadians) * 35.0f, 3.7f, cos(qiqiAngle * toRadians) * 35.0f));
+		model = glm::rotate(model, -(180-qiqiAngle) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		qiqiCent = model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		qiqi_tex.UseTexture();
+		qiqi_cuerpo.RenderModel();
+
+		// muslo derecho
+		matAux = glm::translate( qiqiCent, glm::vec3( 0.89f, -4.15f, -0.33f) );
+		matAux = glm::rotate(matAux, qiqiDerMuslo * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = matAux;
+		model = glm::translate(model, glm::vec3(-0.094f, -1.151f, -0.107f));
+		matAux = model;
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		qiqi_tex.UseTexture();
+		qiqi_muslo_der.RenderModel();
+
+		// pie derecho
+		matAux = glm::translate(matAux, glm::vec3(-0.258f, -1.54f, -0.057f));
+		matAux = glm::rotate(matAux, qiqiDerPie * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = matAux;
+		model = glm::translate(model, glm::vec3(0.01f, -1.937f, -0.112f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		qiqi_tex.UseTexture();
+		qiqi_patorrilla_der.RenderModel();
+
+		// muslo izquierdo
+		matAux = glm::translate(qiqiCent, glm::vec3(-0.89f, -4.15f, -0.33f));
+		matAux = glm::rotate(matAux, qiqiIzqMuslo * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = matAux;
+		model = glm::translate(model, glm::vec3(0.094f, -1.151f, -0.107f));
+		matAux = model;
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		qiqi_tex.UseTexture();
+		qiqi_muslo_izq.RenderModel();
+
+		// pie izquierdo
+		matAux = glm::translate(matAux, glm::vec3(0.258f, -1.54f, -0.057f));
+		matAux = glm::rotate(matAux, qiqiIzqPie * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = matAux;
+		model = glm::translate(model, glm::vec3(-0.01f, -1.937f, -0.112f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		qiqi_tex.UseTexture();
+		qiqi_patorrilla_izq.RenderModel();
 
 		glUseProgram(0);
 
