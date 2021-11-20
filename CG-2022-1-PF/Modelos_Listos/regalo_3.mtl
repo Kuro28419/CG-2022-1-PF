@@ -1,0 +1,59 @@
+# Blender MTL File: 'None'
+# Material Count: 5
+
+newmtl Stack_of_Gifts_1
+Ns 20.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.450000 0.450000 0.450000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Stack_of_Gifts_diffuse.JPG
+
+newmtl Stack_of_Gifts_2
+Ns 20.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.450000 0.450000 0.450000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Stack_of_Gifts_diffuse_1.JPG
+
+newmtl Stack_of_Gifts_3
+Ns 20.000005
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.450000 0.450000 0.450000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Stack_of_Gifts_diffuse_2.JPG
+
+newmtl Stack_of_Gifts_4
+Ns 1.000002
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.000000 0.000000
+Ks 0.324000 0.324000 0.324000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Bump Stack_of_Gifts_bump.jpg
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Texturas_Listas\\rojo.jpg
+
+newmtl Stack_of_Gifts_5
+Ns 1.000002
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.000000 0.000000
+Ks 0.324000 0.324000 0.324000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Bump Stack_of_Gifts_bump.jpg
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Texturas_Listas\\rojo.jpg
