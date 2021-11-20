@@ -1049,6 +1049,21 @@ void padoruAnimation() {
 	padoruExtrAngle += padoruExtrAngleOffset;
 }
 
+void qiqiAnimation() {
+	if (qiqiAngle >= 360) {
+		qiqiAngle = 0.0;
+	}
+
+	if (qiqiDerMuslo > 30.0 or qiqiDerMuslo < -30.0) {
+		qiqiExtrAngleOffset = -qiqiExtrAngleOffset;
+	}
+	qiqiDerMuslo += qiqiExtrAngleOffset * deltaTime;
+	qiqiDerPie += qiqiExtrAngleOffset * deltaTime;
+	qiqiIzqMuslo -= qiqiExtrAngleOffset * deltaTime;
+	qiqiIzqPie -= qiqiExtrAngleOffset * deltaTime;
+	qiqiAngle += qiqiAngleOffset * deltaTime;
+}
+
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
@@ -1180,9 +1195,9 @@ int main()
 	glm::vec3 posblackhawk = glm::vec3(-20.0f, 6.0f, -1.0);
 
 	//luz direccional, sólo 1 y siempre debe de existir
-	//mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-	//	tiempo, 0.3f,//0.3f, 0.3f,
-	//	0.0f, 0.0f, -1.0f);
+	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+		tiempo, 0.3f,//0.3f, 0.3f,
+		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
@@ -1288,18 +1303,7 @@ int main()
 			padoruAnimation();
 		}
 
-		if (qiqiAngle >= 360) {
-			qiqiAngle = 0.0;
-		}
-
-		if (qiqiDerMuslo > 30.0 or qiqiDerMuslo < -30.0) {
-			qiqiExtrAngleOffset = -qiqiExtrAngleOffset;
-		}
-		qiqiDerMuslo += qiqiExtrAngleOffset * deltaTime;
-		qiqiDerPie += qiqiExtrAngleOffset * deltaTime;
-		qiqiIzqMuslo -= qiqiExtrAngleOffset * deltaTime;
-		qiqiIzqPie -= qiqiExtrAngleOffset * deltaTime;
-		qiqiAngle += qiqiAngleOffset * deltaTime;
+		qiqiAnimation();
 
 		/****************************************************************************************************/
 		/****************************************************************************************************/
