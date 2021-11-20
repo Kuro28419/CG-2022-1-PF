@@ -1,0 +1,133 @@
+# Blender MTL File: 'qiqiobj.blend'
+# Material Count: 12
+
+newmtl amulet.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl back_decoration.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl cloth.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl emotion.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl eye_white.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl face.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl hair.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl hat.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl neck_decoration.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl pupil.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl shoe.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
+
+newmtl skin.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Proyecto\\Modelos\\Genshin\\characters Models\\qiqi.png
