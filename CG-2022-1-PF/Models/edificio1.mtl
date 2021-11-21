@@ -1,0 +1,61 @@
+# Blender MTL File: 'building 2.blend'
+# Material Count: 5
+
+newmtl Material.001
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
+
+newmtl buildin2
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
+map_d C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
+
+newmtl buildin2.001
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd -s 3.500000 3.500000 1.000000 C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
+map_d -s 3.500000 3.500000 1.000000 C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
+
+newmtl buildin2.002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd -s 2.500000 2.500000 1.000000 C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
+map_d -s 2.500000 2.500000 1.000000 C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
+
+newmtl window
+Ns 900.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
+map_d C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\edificio1.png
