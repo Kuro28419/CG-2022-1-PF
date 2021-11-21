@@ -14,6 +14,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	width = windowWidth;
 	height = windowHeight;
 	mainStart = false;
+	freeCamera = true;
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -108,6 +109,16 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	if (key == GLFW_KEY_1)
 	{
 		theWindow->mainStart = true;
+	}
+
+	if (key == GLFW_KEY_9)
+	{
+		theWindow->freeCamera = true;
+	}
+
+	if (key == GLFW_KEY_0)
+	{
+		theWindow->freeCamera = false;
 	}
 
 

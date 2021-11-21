@@ -15,6 +15,7 @@ public:
 	GLfloat getYChange();
 	bool getMainStart() { return mainStart; }
 	void setMainStart(bool state) { mainStart = state; }
+	bool getFreeCamera() { return freeCamera; }
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -33,6 +34,7 @@ private:
 	GLfloat yChange;
 	bool mainStart;
 	bool mouseFirstMoved;
+	bool freeCamera;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);
 

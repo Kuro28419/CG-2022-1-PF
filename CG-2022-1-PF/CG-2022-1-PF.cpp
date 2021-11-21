@@ -25,6 +25,7 @@ Cambios en el shader, en lugar de enviar la textura en el shader de fragmentos, 
 #include "Mesh.h"
 #include "Shader_light.h"
 #include "Camera.h"
+#include "UpperCamera.h"
 #include "Texture.h"
 #include "Sphere.h"
 #include"Model.h"
@@ -48,6 +49,8 @@ std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 
 Camera camera;
+UpperCamera upperCamera;
+glm::mat4 viewMatrix;
 
 Texture brickTexture;
 Texture dirtTexture;
@@ -1079,6 +1082,7 @@ int main()
 	CrearToroidePiso(20, 5, 3, 0.5); // pasillo central
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
+	upperCamera = UpperCamera( 1.0f );
 
 	//control audio
 	SoundEngine->setSoundVolume( 0.5 );
@@ -1254,8 +1258,16 @@ int main()
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		if ( mainWindow.getFreeCamera() ) {
+			camera.keyControl(mainWindow.getsKeys(), deltaTime);
+			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+			viewMatrix = camera.calculateViewMatrix();
+		}
+		else
+		{
+			upperCamera.keyControl(mainWindow.getsKeys(), deltaTime);
+			viewMatrix = upperCamera.calculateViewMatrix();
+		}
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -1263,10 +1275,10 @@ int main()
 		// control de escenario del tiempo
 		//skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
 		if (tiempo < 0.6f) {
-			skyboxNight.DrawSkybox(camera.calculateViewMatrix(), projection);
+			skyboxNight.DrawSkybox(viewMatrix, projection);
 		}
 		else {
-			skyboxMorning.DrawSkybox(camera.calculateViewMatrix(), projection);
+			skyboxMorning.DrawSkybox(viewMatrix, projection);
 		}
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
@@ -1279,13 +1291,22 @@ int main()
 		uniformShininess = shaderList[0].GetShininessLocation();
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+		if (mainWindow.getFreeCamera()) {
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+			glm::vec3 lowerLight = camera.getCameraPosition();
+			lowerLight.y -= 0.3f;
+			spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+		}
+		else
+		{
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(upperCamera.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, upperCamera.getCameraPosition().x, upperCamera.getCameraPosition().y, upperCamera.getCameraPosition().z);
+			glm::vec3 lowerLight = upperCamera.getCameraPosition();
+			lowerLight.y -= 0.3f;
+			spotLights[0].SetFlash(lowerLight, upperCamera.getCameraDirection());
+		}
 
-		//luz ligada a la cámara de tipo flash 
-		glm::vec3 lowerLight = camera.getCameraPosition();
-		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
