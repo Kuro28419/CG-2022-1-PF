@@ -1073,7 +1073,6 @@ int main()
 
 	CreateObjects();
 	CrearCubo();
-	CrearToroide(20, 20, 2, 1);
 	CreateShaders();
 	CrearToroidePiso(20, 5, 3, 0.5); // pasillo central
 
@@ -1282,9 +1281,8 @@ int main()
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		//spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
-		spotLights[0].SetPos(glm::vec3(-20.0f + mainWindow.getHelix(), 6.0f + mainWindow.getHeliy(), -1.0));
-		spotLights[1].SetPos( glm::vec3(-5.0f + mainWindow.getmuevex(), 1.7f, 2.0f + mainWindow.getmuevez()) );
-		spotLights[2].SetPos( glm::vec3(-5.0f + mainWindow.getmuevex(), 1.7f, -2.0f + mainWindow.getmuevez()) );
+		//spotLights[0].SetPos(glm::vec3(-20.0f + mainWindow.getHelix(), 6.0f + mainWindow.getHeliy(), -1.0));
+		
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
