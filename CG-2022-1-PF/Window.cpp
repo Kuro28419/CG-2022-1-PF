@@ -15,6 +15,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	height = windowHeight;
 	mainStart = false;
 	freeCamera = true;
+	offSpotLights = 0;
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -106,19 +107,31 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 	
-	if (key == GLFW_KEY_1)
+	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
 	{
 		theWindow->mainStart = true;
 	}
 
-	if (key == GLFW_KEY_9)
+	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
 	{
 		theWindow->freeCamera = true;
 	}
 
-	if (key == GLFW_KEY_0)
+	if (key == GLFW_KEY_0 && action == GLFW_PRESS)
 	{
 		theWindow->freeCamera = false;
+	}
+
+	if (key == GLFW_KEY_8 && action == GLFW_PRESS)
+	{
+		if(theWindow->offSpotLights > 0)
+		theWindow->offSpotLights -= 1;
+	}
+
+	if (key == GLFW_KEY_7 && action == GLFW_PRESS)
+	{
+		if (theWindow->offSpotLights < 6)
+			theWindow->offSpotLights += 1;
 	}
 
 

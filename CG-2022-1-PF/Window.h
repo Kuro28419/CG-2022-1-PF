@@ -16,6 +16,8 @@ public:
 	bool getMainStart() { return mainStart; }
 	void setMainStart(bool state) { mainStart = state; }
 	bool getFreeCamera() { return freeCamera; }
+	void setOffSpotLights(int n) { offSpotLights = n; }
+	int getOffSpotLights() { return offSpotLights; }
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -32,6 +34,7 @@ private:
 	GLfloat lastY;
 	GLfloat xChange;
 	GLfloat yChange;
+	int offSpotLights;
 	bool mainStart;
 	bool mouseFirstMoved;
 	bool freeCamera;

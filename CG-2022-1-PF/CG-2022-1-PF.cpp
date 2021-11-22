@@ -105,9 +105,18 @@ float qiqiDerPie = -30.0;
 float qiqiDerMuslo = 0.0;
 float qiqiIzqPie = -30.0;
 float qiqiIzqMuslo = 0.0;
-float qiqiExtrAngleOffset = 2.0;
+float qiqiExtrAngleOffset = 2.5;
 float qiqiAngle = 0.0;
 float qiqiAngleOffset = 1.0;
+
+//control Hutao
+float hutaoDerPie = -40.0;
+float hutaoDerMuslo = 0.0;
+float hutaoIzqPie = -40.0;
+float hutaoIzqMuslo = 0.0;
+float hutaoExtrAngleOffset = 2.0;
+float hutaoAngle = 0.0;
+float hutaoAngleOffset = 1.0;
 
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
@@ -1057,14 +1066,51 @@ void qiqiAnimation() {
 		qiqiAngle = 0.0;
 	}
 
-	if (qiqiDerMuslo > 30.0 or qiqiDerMuslo < -30.0) {
+	if (qiqiDerMuslo > 30.0 ) {
 		qiqiExtrAngleOffset = -qiqiExtrAngleOffset;
+		qiqiDerPie = -1.0;
+		qiqiDerMuslo = 29.0;
+		qiqiIzqPie = -59.0;
+		qiqiIzqMuslo = -29.0;
+	}
+	if (qiqiDerMuslo < -30.0) {
+		qiqiExtrAngleOffset = -qiqiExtrAngleOffset;
+		qiqiDerPie = -59.0;
+		qiqiDerMuslo = -29.0;
+		qiqiIzqPie = -1.0;
+		qiqiIzqMuslo = 29.0;
 	}
 	qiqiDerMuslo += qiqiExtrAngleOffset * deltaTime;
 	qiqiDerPie += qiqiExtrAngleOffset * deltaTime;
 	qiqiIzqMuslo -= qiqiExtrAngleOffset * deltaTime;
 	qiqiIzqPie -= qiqiExtrAngleOffset * deltaTime;
 	qiqiAngle += qiqiAngleOffset * deltaTime;
+}
+
+void hutaoAnimation() {
+	if (hutaoAngle >= 360) {
+		hutaoAngle = 0.0;
+	}
+
+	if (hutaoDerMuslo > 40.0) {
+		hutaoExtrAngleOffset = -hutaoExtrAngleOffset;
+		hutaoDerPie = -79.0;
+		hutaoDerMuslo = 39.0;
+		hutaoIzqPie = -1.0;
+		hutaoIzqMuslo = -39.0;
+	}
+	if (hutaoDerMuslo < -40.0) {
+		hutaoExtrAngleOffset = -hutaoExtrAngleOffset;
+		hutaoDerPie = -1.0;
+		hutaoDerMuslo = -39.0;
+		hutaoIzqPie = -79.0;
+		hutaoIzqMuslo = 39.0;
+	}
+	hutaoDerMuslo += hutaoExtrAngleOffset * deltaTime;
+	hutaoDerPie -= hutaoExtrAngleOffset * deltaTime;
+	hutaoIzqMuslo -= hutaoExtrAngleOffset * deltaTime;
+	hutaoIzqPie += hutaoExtrAngleOffset * deltaTime;
+	hutaoAngle += hutaoAngleOffset * deltaTime;
 }
 
 int main()
@@ -1081,7 +1127,7 @@ int main()
 	CreateShaders();
 	CrearToroidePiso(20, 5, 3, 0.5); // pasillo central
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 2.0f, 0.5f);
 	upperCamera = UpperCamera( 1.0f );
 
 	//control audio
@@ -1169,7 +1215,21 @@ int main()
 	qiqi_patorrilla_der.LoadModel("Models/qiqi/qiqi_pantorrilla_der.obj");
 	Model qiqi_patorrilla_izq = Model();
 	qiqi_patorrilla_izq.LoadModel("Models/qiqi/qiqi_pantorrilla_izq.obj");
-	
+
+	// modelo Hu Tao
+
+	Texture hutao_tex = Texture("Textures/hutao.png");
+	hutao_tex.LoadTexture();
+	Model hutao_cuerpo = Model();
+	hutao_cuerpo.LoadModel("Models/hutao/hutao_cuerpo.obj");
+	Model hutao_muslo_der = Model();
+	hutao_muslo_der.LoadModel("Models/hutao/hutao_muslo_der.obj");
+	Model hutao_muslo_izq = Model();
+	hutao_muslo_izq.LoadModel("Models/hutao/hutao_muslo_izq.obj");
+	Model hutao_patorrilla_der = Model();
+	hutao_patorrilla_der.LoadModel("Models/hutao/hutao_pantorrilla_der.obj");
+	Model hutao_patorrilla_izq = Model();
+	hutao_patorrilla_izq.LoadModel("Models/hutao/hutao_pantorrilla_izq.obj");
 	
 
 	std::vector<std::string> skyboxFacesNight;
@@ -1195,8 +1255,11 @@ int main()
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
-	//posición inicial del helicóptero
-	glm::vec3 posblackhawk = glm::vec3(-20.0f, 6.0f, -1.0);
+	/****************************************************************************************************/
+	/****************************************************************************************************/
+	//										Defincion luces
+	/****************************************************************************************************/
+	/****************************************************************************************************/
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
@@ -1204,31 +1267,99 @@ int main()
 		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
+	
 	//Declaración de primer luz puntual
-	/*pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
+	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
 		0.0f, 1.0f,
-		2.0f, 1.5f, 1.5f,
+		0.0f, 100.0f, 0.0f,
 		0.3f, 0.2f, 0.1f);
-	pointLightCount++;*/
+	pointLightCount++;
+	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 26.0f, -110.0f,
+		0.3f, 0.06f, 0.000001f);
+	pointLightCount++;
+	pointLights[2] = PointLight(1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f,
+		0.0f, 26.0f, 110.0f,
+		0.3f, 0.06f, 0.000001f);
+	pointLightCount++;
+	pointLights[3] = PointLight(1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f,
+		sin(60 * toRadians) * 110.0f, 26.0f, cos(60 * toRadians) * 110.0f,
+		0.3f, 0.06f, 0.000001f);
+	pointLightCount++;
+	pointLights[4] = PointLight(1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f,
+		sin(120 * toRadians) * 110.0f, 26.0f, cos(120 * toRadians) * 110.0f,
+		0.3f, 0.06f, 0.000001f);
+	pointLightCount++;
+	pointLights[5] = PointLight(1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f,
+		-sin(60 * toRadians) * 110.0f, 26.0f, -cos(60 * toRadians) * 110.0f,
+		0.3f, 0.06f, 0.000001f);
+	pointLightCount++;
+	pointLights[6] = PointLight(1.0f, 1.0f, 1.0f,
+		0.0f, 1.0f,
+		-sin(120 * toRadians) * 110.0f, 26.0f, -cos(120 * toRadians) * 110.0f,
+		0.3f, 0.06f, 0.000001f);
+	pointLightCount++;
 
 	unsigned int spotLightCount = 0;
 	//linterna
-	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+	/*spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
 		0.0f, 2.0f,
 		0.0f, 0.0f, 0.0f,
 		0.0f, -1.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		5.0f);
+	spotLightCount++;*/
+
+	//luz fija
+	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+		1.0f, 2.0f,
+		-170.0f, 150.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		0.03f, 0.0005f, 0.0001f,
+		20.0f);
+	spotLightCount++;
+	spotLights[3] = SpotLight(1.0f, 1.0f, 1.0f,
+		1.0f, 2.0f,
+		170.0f, 150.0f, 0.0f,
+		0.0f, -1.0f, 0.0f,
+		0.03f, 0.0005f, 0.0001f,
+		20.0f);
+	spotLightCount++;
+	spotLights[2] = SpotLight(1.0f, 1.0f, 1.0f,
+		1.0f, 2.0f,
+		sin(30 * toRadians) * 170.0f, 150.0f, cos(30 * toRadians) * 170.0f,
+		0.0f, -1.0f, 0.0f,
+		0.03f, 0.0005f, 0.0001f,
+		20.0f);
+	spotLightCount++;
+	spotLights[4] = SpotLight(1.0f, 1.0f, 1.0f,
+		1.0f, 2.0f,
+		sin(150 * toRadians) * 170.0f, 150.0f, cos(150 * toRadians) * 170.0f,
+		0.0f, -1.0f, 0.0f,
+		0.03f, 0.0005f, 0.0001f,
+		20.0f);
+	spotLightCount++;
+	spotLights[5] = SpotLight(1.0f, 1.0f, 1.0f,
+		1.0f, 2.0f,
+		-sin(30 * toRadians) * 170.0f, 150.0f, -cos(30 * toRadians) * 170.0f,
+		0.0f, -1.0f, 0.0f,
+		0.03f, 0.0005f, 0.0001f,
+		20.0f);
+	spotLightCount++;
+	spotLights[1] = SpotLight(1.0f, 1.0f, 1.0f,
+		1.0f, 2.0f,
+		-sin(150 * toRadians) * 170.0f, 150.0f, -cos(150 * toRadians) * 170.0f,
+		0.0f, -1.0f, 0.0f,
+		0.03f, 0.0005f, 0.0001f,
+		20.0f);
 	spotLightCount++;
 
-	////luz fija
-	//spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
-	//	1.0f, 2.0f,
-	//	5.0f, 10.0f, 0.0f,
-	//	0.0f, -5.0f, 0.0f,
-	//	1.0f, 0.0f, 0.0f,
-	//	15.0f);
-	//spotLightCount++;
+	mainWindow.setOffSpotLights( spotLightCount );
 
 
 	
@@ -1253,7 +1384,7 @@ int main()
 		if (tiempo < 0.1 or tiempo > 1.0) {
 			tiempoOffset = -tiempoOffset;
 		}
-		tiempo += tiempoOffset*deltaTime;
+		//tiempo += tiempoOffset*deltaTime;
 
 
 		//Recibir eventos del usuario
@@ -1294,24 +1425,18 @@ int main()
 		if (mainWindow.getFreeCamera()) {
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
-			glm::vec3 lowerLight = camera.getCameraPosition();
-			lowerLight.y -= 0.3f;
-			spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 		}
 		else
 		{
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(upperCamera.calculateViewMatrix()));
 			glUniform3f(uniformEyePosition, upperCamera.getCameraPosition().x, upperCamera.getCameraPosition().y, upperCamera.getCameraPosition().z);
-			glm::vec3 lowerLight = upperCamera.getCameraPosition();
-			lowerLight.y -= 0.3f;
-			spotLights[0].SetFlash(lowerLight, upperCamera.getCameraDirection());
 		}
 
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
-		shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		shaderList[0].SetSpotLights(spotLights, spotLightCount - mainWindow.getOffSpotLights());
 
 		/****************************************************************************************************/
 		/****************************************************************************************************/
@@ -1325,6 +1450,7 @@ int main()
 		}
 
 		qiqiAnimation();
+		hutaoAnimation();
 
 		/****************************************************************************************************/
 		/****************************************************************************************************/
@@ -1352,7 +1478,10 @@ int main()
 
 		model = glm::mat4(1.0);
 		mesaModel = glm::translate(mesaModel, glm::vec3(0.0f, 2.0f, 100.0f));
+		// rotate
 		mesaModel = glm::scale(mesaModel, glm::vec3(2.0f, 2.0f, 2.0f));
+		
+
 		model = glm::rotate(mesaModel, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 0.1f, 4.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1424,6 +1553,10 @@ int main()
 
 		pinataModel = glm::mat4(1.0);
 		pinataModel = glm::translate(pinataModel, glm::vec3(0.0f, 10.0f, 100.0f));
+		// rotate
+		//pinataModel = glm::scale(pinataModel, glm::vec3(5.0f, 5.0f, 5.0f));
+
+
 		model = glm::scale(pinataModel, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		pinata_center.UseTexture();
@@ -1505,6 +1638,7 @@ int main()
 		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		pisoBrick.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[14]->RenderTorusMesh();
 
 		//// toroide
@@ -1634,6 +1768,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1643,6 +1778,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1652,6 +1788,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1661,6 +1798,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1670,6 +1808,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1679,6 +1818,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		/****************************************************************************************************/
@@ -1914,7 +2054,7 @@ int main()
 		/****************************************************************************************************/
 
 		QHCicleCenter = glm::mat4(1.0);
-		QHCicleCenter = glm::translate(QHCicleCenter, glm::vec3(-140.0f, 6.0f, 0.0f)); //  matriz central sobre la que se jerarquizaran los modelos.
+		QHCicleCenter = glm::translate(QHCicleCenter, glm::vec3(-170.0f, 6.0f, 0.0f)); //  matriz central sobre la que se jerarquizaran los modelos.
 
 		// Qiqi
 
@@ -1978,6 +2118,69 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		qiqi_tex.UseTexture();
 		qiqi_patorrilla_izq.RenderModel();
+
+		// Hu Tao
+
+		glm::mat4 hutaoCent(1.0);
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(QHCicleCenter, glm::vec3(sin((hutaoAngle-20) * toRadians) * 35.0f, 3.7f, cos((hutaoAngle - 20) * toRadians) * 35.0f));
+		model = glm::rotate(model, (hutaoAngle - 30) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		hutaoCent = model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		hutao_tex.UseTexture();
+		hutao_cuerpo.RenderModel();
+
+		// muslo derecho
+		matAux = glm::translate(hutaoCent, glm::vec3(-0.8f, -1.18f, -0.308f));
+		matAux = glm::rotate(matAux, hutaoDerMuslo * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = matAux;
+		model = glm::translate(model, glm::vec3(-0.076f, -1.868f, 0.351f));
+		matAux = model;
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		hutao_tex.UseTexture();
+		hutao_muslo_der.RenderModel();
+
+		// pie derecho
+		matAux = glm::translate(matAux, glm::vec3(0.2f, -2.223f, 0.1));
+		matAux = glm::rotate(matAux, -hutaoDerPie * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = matAux;
+		model = glm::translate(model, glm::vec3(0.02f, -2.982f, 0.189f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		hutao_tex.UseTexture();
+		hutao_patorrilla_der.RenderModel();
+
+		// muslo izquierdo
+		matAux = glm::translate(hutaoCent, glm::vec3(0.8f, -1.18f, -0.308f));
+		matAux = glm::rotate(matAux, hutaoIzqMuslo * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = matAux;
+		model = glm::translate(model, glm::vec3(0.076f, -1.868f, 0.351f));
+		matAux = model;
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		hutao_tex.UseTexture();
+		hutao_muslo_izq.RenderModel();
+
+		// pie izquierdo
+		matAux = glm::translate(matAux, glm::vec3(-0.2f, -2.223f, 0.1));
+		matAux = glm::rotate(matAux, -hutaoIzqPie * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = matAux;
+		model = glm::translate(model, glm::vec3(-0.02f, -2.982f, 0.189f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		hutao_tex.UseTexture();
+		hutao_patorrilla_izq.RenderModel();
 
 		glUseProgram(0);
 

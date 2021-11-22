@@ -1,4 +1,4 @@
-# Blender MTL File: 'hutaoobj.blend'
+# Blender MTL File: 'None'
 # Material Count: 2
 
 newmtl footwear
@@ -10,9 +10,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 3
-map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
+map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl skin
+newmtl skin.005
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -21,4 +21,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 3
-map_Kd C:\\Users\\BastianLZ\\OneDrive\\Documentos\\Zoomestre3\\Computacion_Grafica\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
+map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
