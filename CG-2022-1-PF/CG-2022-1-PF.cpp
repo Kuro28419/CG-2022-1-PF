@@ -138,6 +138,10 @@ bool XfilesSoundDone = false;
 GLfloat tiempoIni = 0.0;
 GLfloat tiempoFin = 0.0;
 
+//control Knucles
+float knucleAngle = 0.0;
+float knucleAngleOffset = 0.05;
+
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
 
@@ -1156,6 +1160,13 @@ void pinataMov() {
 	}
 }
 
+void knucleMov() {
+	if (knucleAngle > 360) {
+		knucleAngle = 0.0;
+	}
+	knucleAngle += knucleAngleOffset * deltaTime;
+}
+
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
@@ -1533,6 +1544,10 @@ int main()
 
 		if (mainWindow.getAni1Start()) {
 			pinataMov();
+		}
+
+		if (mainWindow.getAni2Start()) {
+			knucleMov();
 		}
 
 		/****************************************************************************************************/
@@ -2330,48 +2345,58 @@ int main()
 		/****************************************************************************************************/
 
 		// knuckles
+		glm::mat4 knuclesCenter(1.0f);
+		knuclesCenter = glm::translate(knuclesCenter, glm::vec3(94.0f, 0.0f, 150.0f));
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(115.0f, -1.5f, 137.0f));
-		model = glm::rotate(model, -55 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(knuclesCenter, glm::vec3(cos(knucleAngle + 60) * 20.0f, -1.5f, sin(knucleAngle + 60) * 20.0f));
+		model = glm::rotate(model, (knucleAngle) * toRadians, glm::vec3(0.0f, -1.0f, 0.0f));
 		//model = glm::rotate(model, -125 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		knuckles.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(72.0f, -1.5f, 163.0f));
-		model = glm::rotate(model, -235 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(knuclesCenter, glm::vec3(cos(knucleAngle + 120) * 20.0f, -1.5f, sin(knucleAngle + 120) * 20.0f));
+		model = glm::rotate(model, (knucleAngle) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -125 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		knuckles.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(95.0f, -1.5f, 175.0f));
-		model = glm::rotate(model, -175 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(knuclesCenter, glm::vec3(cos(knucleAngle) * 20.0f, -1.5f, sin(knucleAngle ) * 20.0f));
+		model = glm::rotate(model, knucleAngle * toRadians, glm::vec3(0.0f, -1.0f, 0.0f));
+		//model = glm::rotate(model, -125 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		knuckles.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(116.0f, -1.5f, 162.0f));
-		model = glm::rotate(model, -115 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(knuclesCenter, glm::vec3(cos(knucleAngle + 180) * 20.0f, -1.5f, sin(knucleAngle +180) * 20.0f));
+		model = glm::rotate(model, (knucleAngle) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -125 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		knuckles.RenderModel();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(93.0f, -1.5f, 125.0f));
-		model = glm::rotate(model, 5 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(knuclesCenter, glm::vec3(cos(knucleAngle -120) * 20.0f, -1.5f, sin(knucleAngle -120) * 20.0f));
+		model = glm::rotate(model, (knucleAngle ) * toRadians, glm::vec3(0.0f, -1.0f, 0.0f));
+		//model = glm::rotate(model, -125 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		knuckles.RenderModel();
 
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(72.0f, -1.5f, 139.0f));
-		model = glm::rotate(model, -295 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(knuclesCenter, glm::vec3(cos(knucleAngle - 60) * 20.0f, -1.5f, sin(knucleAngle - 60) * 20.0f));
+		model = glm::rotate(model, (knucleAngle) * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -125 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		knuckles.RenderModel();
+
 
 		/*///////////////////////////////////////////////////////////////////////////////////////////////////*/
 		model = glm::mat4(1.0);
