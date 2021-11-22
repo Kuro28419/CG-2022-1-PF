@@ -131,6 +131,13 @@ float hutaoExtrAngleOffset = 2.0;
 float hutaoAngle = 0.0;
 float hutaoAngleOffset = 1.0;
 
+//control piñata
+float pinataMovAngle = 0.0f;
+float pinataMovOffset = 1.0f;
+bool XfilesSoundDone = false;
+GLfloat tiempoIni = 0.0;
+GLfloat tiempoFin = 0.0;
+
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
 
@@ -1126,6 +1133,29 @@ void hutaoAnimation() {
 	hutaoAngle += hutaoAngleOffset * deltaTime;
 }
 
+void pinataMov() {
+
+	if (!XfilesSoundDone) {
+		SoundEngine->play2D("Sounds/Xfiles.mp3");
+		XfilesSoundDone = true;
+		tiempoIni = glfwGetTime();
+	}
+
+	if (pinataMovAngle > 50.0) {
+		pinataMovOffset = -pinataMovOffset;
+		pinataMovAngle = 49.0;
+	}
+	if (pinataMovAngle < -50.0) {
+		pinataMovOffset = -pinataMovOffset;
+		pinataMovAngle = -49.0;
+	}
+	pinataMovAngle += pinataMovOffset * deltaTime;
+	tiempoFin = glfwGetTime();
+	if (tiempoFin - tiempoIni > 15.0f) {
+		XfilesSoundDone = false;
+	}
+}
+
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
@@ -1501,6 +1531,10 @@ int main()
 		qiqiAnimation();
 		hutaoAnimation();
 
+		if (mainWindow.getAni1Start()) {
+			pinataMov();
+		}
+
 		/****************************************************************************************************/
 		/****************************************************************************************************/
 		//										Modelado geometrico
@@ -1603,11 +1637,15 @@ int main()
 
 		// esfera - piñata
 
+		glm::mat4 pinataRot(1.0f);
+		pinataRot = glm::translate(pinataRot, glm::vec3(94.0f, 22.0f, 150.0f));
+		pinataRot = glm::rotate(pinataRot, pinataMovAngle * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
 		glm::mat4 pinataModel(1.0f);
 
 		pinataModel = glm::mat4(1.0);
 		//pinataModel = glm::translate(pinataModel, glm::vec3(100.0f, 10.0f, 160.0f));
-		pinataModel = glm::translate(pinataModel, glm::vec3(94.0f, 17.0f, 150.0f));
+		pinataModel = glm::translate(pinataRot, glm::vec3(0.0f, -5.0f, 0.0f));
 		pinataModel = glm::rotate(pinataModel, 0 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		pinataModel = glm::scale(pinataModel, glm::vec3(3.0f, 3.0f, 3.0));
 

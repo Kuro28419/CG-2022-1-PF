@@ -1,7 +1,7 @@
 # Blender MTL File: 'None'
 # Material Count: 12
 
-newmtl amulet.001
+newmtl amulet.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -12,7 +12,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl back_decoration.001
+newmtl back_decoration.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -23,7 +23,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl cloth.001
+newmtl cloth.012
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -34,7 +34,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl emotion.001
+newmtl emotion.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -45,7 +45,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl eye_white.001
+newmtl eye_white.008
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -56,7 +56,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl face.001
+newmtl face.006
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -67,7 +67,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl hair.001
+newmtl hair.006
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -78,7 +78,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl hat.001
+newmtl hat.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -89,7 +89,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl neck_decoration.001
+newmtl neck_decoration.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -100,7 +100,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl pupil.001
+newmtl pupil.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -111,7 +111,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl shoe.001
+newmtl shoe.008
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -122,7 +122,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\qiqi.png
 
-newmtl skin.001
+newmtl skin.028
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000

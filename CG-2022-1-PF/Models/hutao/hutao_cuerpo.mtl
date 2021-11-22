@@ -1,7 +1,7 @@
 # Blender MTL File: 'None'
 # Material Count: 25
 
-newmtl band1
+newmtl band1.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -12,7 +12,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl cap
+newmtl cap.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -23,7 +23,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl cloth
+newmtl cloth.008
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -34,7 +34,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl cloth.001
+newmtl cloth.009
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -45,7 +45,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl cloth.002
+newmtl cloth.010
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -56,7 +56,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl double_eyelid
+newmtl double_eyelid.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -67,7 +67,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl eye
+newmtl eye.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -78,7 +78,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl eye_star
+newmtl eye_star.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -89,7 +89,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl eye_white
+newmtl eye_white.006
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -100,7 +100,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl eyebrow
+newmtl eyebrow.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -111,7 +111,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl eyelashes
+newmtl eyelashes.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -122,7 +122,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl face
+newmtl face.004
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -133,7 +133,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl face1
+newmtl face1.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -144,7 +144,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl god_eyeAL
+newmtl god_eyeAL.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -155,7 +155,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl hair
+newmtl hair.004
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -166,7 +166,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl hat_ornament
+newmtl hat_ornament.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -177,7 +177,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl mouth_tongue
+newmtl mouth_tongue.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -188,7 +188,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl new_material
+newmtl new_material.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -199,7 +199,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl pants
+newmtl pants.010
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -210,7 +210,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl ring
+newmtl ring.004
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -221,7 +221,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl ring.001
+newmtl ring.005
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -232,7 +232,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl skin
+newmtl skin.022
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -243,7 +243,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl skin.001
+newmtl skin.023
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -254,7 +254,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl skin.002
+newmtl skin.024
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -265,7 +265,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl teeth
+newmtl teeth.003
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000

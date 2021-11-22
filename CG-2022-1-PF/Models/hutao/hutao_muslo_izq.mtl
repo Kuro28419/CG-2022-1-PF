@@ -1,7 +1,7 @@
 # Blender MTL File: 'None'
 # Material Count: 2
 
-newmtl pants.003
+newmtl pants.012
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000
@@ -12,7 +12,7 @@ d 1.000000
 illum 3
 map_Kd C:\\Users\\exmen\\Documents\\CG-2022-1-PF\\CG-2022-1-PF\\Textures\\hutao.png
 
-newmtl skin.006
+newmtl skin.026
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
 Kd 1.000000 1.000000 1.000000

@@ -14,6 +14,8 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	width = windowWidth;
 	height = windowHeight;
 	mainStart = false;
+	ani1Start = false;
+	ani2Start = false;
 	freeCamera = true;
 	offSpotLights = 0;
 	for (size_t i = 0; i < 1024; i++)
