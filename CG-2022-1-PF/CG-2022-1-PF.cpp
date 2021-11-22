@@ -40,6 +40,7 @@ Cambios en el shader, en lugar de enviar la textura en el shader de fragmentos, 
 #include "Material.h"
 
 irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
+irrklang::ISoundEngine* Background = irrklang::createIrrKlangDevice();
 
 const float PI = 3.14159265f;
 const float toRadians = 3.14159265f / 180.0f;
@@ -1132,6 +1133,7 @@ int main()
 
 	//control audio
 	SoundEngine->setSoundVolume( 0.5 );
+	Background->setSoundVolume(0.2);
 
 	toroidTexture = Texture("Textures/metal.png");
 	toroidTexture.LoadTexture();
@@ -1369,6 +1371,7 @@ int main()
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	
 	lastTime = glfwGetTime();
+	Background->play2D("Sounds/fondo.mp3", true);
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
