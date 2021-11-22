@@ -15,6 +15,8 @@ public:
 	GLfloat getYChange();
 	bool getMainStart() { return mainStart; }
 	void setMainStart(bool state) { mainStart = state; }
+	bool getAni1Start() { return ani1Start; }
+	bool getAni2Start() { return ani2Start; }
 	bool getFreeCamera() { return freeCamera; }
 	void setOffSpotLights(int n) { offSpotLights = n; }
 	int getOffSpotLights() { return offSpotLights; }
@@ -36,6 +38,8 @@ private:
 	GLfloat yChange;
 	int offSpotLights;
 	bool mainStart;
+	bool ani1Start;
+	bool ani2Start;
 	bool mouseFirstMoved;
 	bool freeCamera;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);

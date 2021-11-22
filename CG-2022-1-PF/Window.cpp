@@ -111,6 +111,14 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		theWindow->mainStart = true;
 	}
+	if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+	{
+		theWindow->ani1Start = !theWindow->ani1Start;
+	}
+	if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+	{
+		theWindow->ani2Start = !theWindow->ani2Start;
+	}
 
 	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
 	{
