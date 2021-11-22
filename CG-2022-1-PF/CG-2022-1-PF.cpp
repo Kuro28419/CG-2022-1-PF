@@ -70,6 +70,9 @@ Skybox skyboxMorning;
 //materiales
 Material Material_brillante;
 Material Material_opaco;
+Material Material_Semibrillante;
+Material Material_Semiopaco;
+Material Material_opacoBrillante;
 
 //luz direccional
 DirectionalLight mainLight;
@@ -1128,7 +1131,7 @@ int main()
 	CreateShaders();
 	CrearToroidePiso(20, 5, 3, 0.5); // pasillo central
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 2.0f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 10.0f, 50.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 2.0f, 0.5f);
 	upperCamera = UpperCamera( 1.0f );
 
 	//control audio
@@ -1256,6 +1259,9 @@ int main()
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
+	Material_Semibrillante = Material( 3.0f, 100);
+	Material_Semiopaco = Material(0.5f, 50);
+	Material_opacoBrillante = Material( 1.0, 10 );
 
 	/****************************************************************************************************/
 	/****************************************************************************************************/
@@ -1276,17 +1282,17 @@ int main()
 		0.0f, 100.0f, 0.0f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
-	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+	pointLights[1] = PointLight(0.127f, 0.787f, 0.199f,
 		0.0f, 1.0f,
 		0.0f, 26.0f, -110.0f,
 		0.3f, 0.06f, 0.000001f);
 	pointLightCount++;
-	pointLights[2] = PointLight(1.0f, 1.0f, 1.0f,
+	pointLights[2] = PointLight(0.127f, 0.787f, 0.199f,
 		0.0f, 1.0f,
 		0.0f, 26.0f, 110.0f,
 		0.3f, 0.06f, 0.000001f);
 	pointLightCount++;
-	pointLights[3] = PointLight(1.0f, 1.0f, 1.0f,
+	pointLights[3] = PointLight(0.866f, 0.192f, 0.192f,
 		0.0f, 1.0f,
 		sin(60 * toRadians) * 110.0f, 26.0f, cos(60 * toRadians) * 110.0f,
 		0.3f, 0.06f, 0.000001f);
@@ -1296,7 +1302,7 @@ int main()
 		sin(120 * toRadians) * 110.0f, 26.0f, cos(120 * toRadians) * 110.0f,
 		0.3f, 0.06f, 0.000001f);
 	pointLightCount++;
-	pointLights[5] = PointLight(1.0f, 1.0f, 1.0f,
+	pointLights[5] = PointLight(0.866f, 0.192f, 0.192f,
 		0.0f, 1.0f,
 		-sin(60 * toRadians) * 110.0f, 26.0f, -cos(60 * toRadians) * 110.0f,
 		0.3f, 0.06f, 0.000001f);
@@ -1308,67 +1314,56 @@ int main()
 	pointLightCount++;
 
 	unsigned int spotLightCount = 0;
-	//linterna
-	/*spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		5.0f);
-	spotLightCount++;*/
 
 	//luz fija
 	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 2.0f,
 		-170.0f, 150.0f, 0.0f,
 		0.0f, -1.0f, 0.0f,
-		0.03f, 0.0005f, 0.0001f,
+		0.03f, 0.0008f, 0.0001f,
 		20.0f);
 	spotLightCount++;
 	spotLights[3] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 2.0f,
 		170.0f, 150.0f, 0.0f,
 		0.0f, -1.0f, 0.0f,
-		0.03f, 0.0005f, 0.0001f,
+		0.03f, 0.0008f, 0.0001f,
 		20.0f);
 	spotLightCount++;
 	spotLights[2] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 2.0f,
 		sin(30 * toRadians) * 170.0f, 150.0f, cos(30 * toRadians) * 170.0f,
 		0.0f, -1.0f, 0.0f,
-		0.03f, 0.0005f, 0.0001f,
+		0.03f, 0.0008f, 0.0001f,
 		20.0f);
 	spotLightCount++;
 	spotLights[4] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 2.0f,
 		sin(150 * toRadians) * 170.0f, 150.0f, cos(150 * toRadians) * 170.0f,
 		0.0f, -1.0f, 0.0f,
-		0.03f, 0.0005f, 0.0001f,
+		0.03f, 0.0008f, 0.0001f,
 		20.0f);
 	spotLightCount++;
 	spotLights[5] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 2.0f,
 		-sin(30 * toRadians) * 170.0f, 150.0f, -cos(30 * toRadians) * 170.0f,
 		0.0f, -1.0f, 0.0f,
-		0.03f, 0.0005f, 0.0001f,
+		0.03f, 0.0008f, 0.0001f,
 		20.0f);
 	spotLightCount++;
 	spotLights[1] = SpotLight(1.0f, 1.0f, 1.0f,
 		1.0f, 2.0f,
 		-sin(150 * toRadians) * 170.0f, 150.0f, -cos(150 * toRadians) * 170.0f,
 		0.0f, -1.0f, 0.0f,
-		0.03f, 0.0005f, 0.0001f,
+		0.03f, 0.0008f, 0.0001f,
 		20.0f);
 	spotLightCount++;
 
 	mainWindow.setOffSpotLights( spotLightCount );
 
-
-	
-
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
-	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
+	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 500.0f);
 	
 	lastTime = glfwGetTime();
 	Background->play2D("Sounds/fondo.mp3", true);
@@ -1387,14 +1382,14 @@ int main()
 		if (tiempo < 0.1 or tiempo > 1.0) {
 			tiempoOffset = -tiempoOffset;
 		}
-		//tiempo += tiempoOffset*deltaTime;
+		tiempo += tiempoOffset*deltaTime;
 
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
 		if ( mainWindow.getFreeCamera() ) {
 			camera.keyControl(mainWindow.getsKeys(), deltaTime);
-			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+			camera.mouseControl(mainWindow.getXChange());
 			viewMatrix = camera.calculateViewMatrix();
 		}
 		else
@@ -1563,6 +1558,7 @@ int main()
 		model = glm::scale(pinataModel, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		pinata_center.UseTexture();
+		Material_Semibrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[11]->RenderMesh();
 		meshList[12]->RenderTorusMesh();
 		meshList[13]->RenderMesh();
@@ -1698,6 +1694,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		arbol_tex.UseTexture();
+		Material_opacoBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		arbol_central.RenderModel();
 
 		/****************************************************************************************************/
@@ -1771,7 +1768,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Material_Semibrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1781,7 +1778,6 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1791,7 +1787,6 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1801,7 +1796,6 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1811,7 +1805,6 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1821,7 +1814,6 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		faro_tex.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		faro.RenderModel();
 
 		/****************************************************************************************************/
@@ -1836,6 +1828,7 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		bush_tex.UseTexture();
+		Material_Semiopaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		bush.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1900,6 +1893,7 @@ int main()
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		edificio1_tex.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		edificio1.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -1975,6 +1969,7 @@ int main()
 		//model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		padoru_tex.UseTexture();
+		Material_Semibrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		padoru_cuerpo.RenderModel();
 
 		model = glm::mat4(1.0);
@@ -2070,6 +2065,7 @@ int main()
 		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		qiqi_tex.UseTexture();
+		Material_opacoBrillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		qiqi_cuerpo.RenderModel();
 
 		// muslo derecho
