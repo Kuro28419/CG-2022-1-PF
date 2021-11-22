@@ -30,6 +30,7 @@ Cambios en el shader, en lugar de enviar la textura en el shader de fragmentos, 
 #include "Sphere.h"
 #include"Model.h"
 #include "Skybox.h"
+#include "include/irrKlang.h"
 
 
 //para iluminación
